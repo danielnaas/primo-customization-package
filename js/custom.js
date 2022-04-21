@@ -1,26 +1,45 @@
 (function(){
     "use strict";
     'use strict';
-    
-    // done with barcode stuff
-    
-    // Start feedbox stuff
-    // suppressing feedbox on 7/19
-    //var feedBox = document.createElement("div");
-    //feedBox.style = "top: 30%; transform-origin: left top; border: 2px solid black; height: 400px; width: 400px; text-align: center; right: -230px; margin-right: 0px; position: fixed; z-index: 1000; display: block; cursor: pointer; background-color: #B1C9E8; padding: 10px; font-size: 16px; font-weight: 700; font-family: Arial;";
-    //feedBox.innerHTML = '<div id="feedbackContainer"><div id="feedbackLabel" onclick="feedbackToggle()"><p>Quick feedback</p></div><div id="feedbackContent"><em>Primo VE Quick Feedback</br>July 2021 system update</em><br/><br/><p>What\'s on your mind?</p><textarea id="problem" style="width:360px; resize:none" rows=4></textarea><br/><br/>Please include your name and e-mail address if you\'d like a system adminstrator to follow up with you (optional):<br/><input type="hidden" id="url" name="url" value="website address"><br/>Name:<br/><input id="contactName" name="contactName"><br/>E-mail address<br/><input id="contactEmail" name="contactEmail"><br/><button id="ajaxButton" type="button" onclick="makeRequest()">Submit</button><br/></div></div>';
-    //document.body.appendChild(feedBox);
-    
-    //const feedScript = document.createElement("script");
-    //feedScript.type = "text/javascript";
-    //feedScript.src = "https://saalck-uky.primo.exlibrisgroup.com/discovery/custom/01SAA_UKY-UKY/js/feedback.js";
-    
-    //document.head.appendChild(feedScript);    
-    
-    
-    /// end feedbox stuff
-    
+        
     var app = angular.module('viewCustom', ['angularLoad']);
+
+    // Start Maps->Aeon stuff
+  app.component('mapRequest', {
+    bindings: { parentCtrl: '<' },
+    controller: 'mapRequestController',
+    template: '<span ng-if="$ctrl.Mms" class="md-primoExplore-theme"><a ng-href="{{$ctrl.link}}"><img class="aeonicon" src="https://saalck-uky.primo.exlibrisgroup.com/discovery/custom/01SAA_UKY-UKY/img/UKAeonfavicon2.png">Submit Request to Access This Map</a></span>'
+
+  });
+
+  app.controller('mapRequestController', [function () {
+    var self = this;
+    self.Mms = null;
+
+    // array of map sublocations
+    var mapSubLocations = ['scimap', 'scimapovsz', 'scimapdma', 'scimapfich', 'scimapfilm', 'scimappost', 'scimapref', 'scimapsanb', 'scimaptopo', 'scimapvert'];
+    //console.log(self.parentCtrl.result);
+    if (self.parentCtrl.result.delivery.deliveryCategory[0] == "Alma-P") {
+      if (mapSubLocations.includes(self.parentCtrl.result.delivery.bestlocation.subLocationCode)) {
+        //console.log("Yes to this one");
+        self.Mms = self.parentCtrl.result.pnx.control.recordid[0];
+        console.log("Yes to this one: " + self.Mms);
+        var urlGenre = "&rft.genre=map";
+        var urlTitle = "&ItemTitle=" + encodeURIComponent(self.parentCtrl.result.pnx.addata.btitle[0]);
+        var urlCreator = "&ItemAuthor=" + encodeURIComponent(self.parentCtrl.result.pnx.sort.author[0]);;
+        var urlCallNo = "&CallNumber=" + encodeURIComponent(self.parentCtrl.result.delivery.holding[0].callNumber);
+        var urlSubLoc = "&Location=" + encodeURIComponent(self.parentCtrl.result.delivery.bestlocation.subLocation);
+        var urlDate = "&ItemDate=" + encodeURIComponent(self.parentCtrl.result.pnx.display.creationdate);
+        var urlSource = "&ItemInfo2=" + encodeURIComponent("https://saalck-uky.primo.exlibrisgroup.com/permalink/01SAA_UKY/15remem/" + self.parentCtrl.result.pnx.control.recordid[0]);
+        var urlCombined = urlGenre + urlTitle + urlCreator + urlCallNo + urlSubLoc + urlDate + urlSource + "rft.genre=gwen ";
+        var urlCombined = urlCombined.replace("'", "");
+
+        self.link = "https://requests-libraries.uky.edu/logon?Action=10&Form=30&OpenURL?" + urlCombined;
+      }
+    }
+  }]);
+
+    // End Maps->Aeon stuff
     
     // Start HathiTrust & BrowZine link stuff
     
@@ -31,7 +50,7 @@
     app.component('prmSearchResultAvailabilityLineAfter', {
       bindings: { parentCtrl: '<' },
       controller: 'SearchResultAvailabilityLineAfterController',
-      template: '\n    <hathi-trust-availability-studio parent-ctrl="$ctrl.parentCtrl"></hathi-trust-availability-studio><primo-studio-browzine parent-ctrl="$ctrl.parentCtrl"></primo-studio-browzine>\n'
+      template: '\n    <map-request parent-ctrl="$ctrl.parentCtrl"></map-request><hathi-trust-availability-studio parent-ctrl="$ctrl.parentCtrl"></hathi-trust-availability-studio><primo-studio-browzine parent-ctrl="$ctrl.parentCtrl"></primo-studio-browzine>\n'
     
     
     });

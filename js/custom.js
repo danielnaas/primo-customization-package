@@ -8,7 +8,7 @@
   app.component('mapRequest', {
     bindings: { parentCtrl: '<' },
     controller: 'mapRequestController',
-    template: '<div ng-show="$ctrl.showMap"><i class="fa fa-map mapToggleMap"></i><a id="mapToggleLink" href="" class="arrow-link md-primoExplore-theme" ng-click="mapToggle=(mapToggle ? false : true)">Show a map of {{$ctrl.libraryName}}</a><prm-icon id="mapToggleIcon" link-arrow="" icon-type="svg" svg-icon-set="primo-ui" icon-definition="chevron-right"><md-icon id="mapToggleIcon" class="md-primoExplore-theme"></md-icon></prm-icon>' + '<div ng-if="mapToggle"><code ng-show="$ctrl.debug" class="ic-debug">MAP PROBLEM</code>' + '<br /><br />' + '<div class="ic-map-div">' + '<img class="ic-map-img" ng-src="{{$ctrl.mapFileLocation}}" ng-style="$ctrl.mapDimensions", title={{$ctrl.mapMessage}}>' + '<canvas class="ic-map-canvas"></canvas>' + '</div>' + '</div></div>'
+    template: '<span ng-if="$ctrl.Mms" class="md-primoExplore-theme"><a ng-href="{{$ctrl.link}}"><img class="aeonicon" src="https://saalck-uky.primo.exlibrisgroup.com/discovery/custom/01SAA_UKY-UKY/img/UKAeonfavicon2.png">Submit Request to Access This Map</a></span>'
 
   });
 
@@ -367,7 +367,14 @@
         } catch (e) {
             this.library = '';
         }
-    
+
+        // get the library where the item is located
+          try {
+            this.libraryName = this.parentCtrl.item.delivery.bestlocation.mainLocation;
+        } catch (e) {
+            this.libraryName = '';
+        }
+                  
         // get the library location where the item is located
         try {
             this.location = this.parentCtrl.item.delivery.bestlocation.subLocationCode;
@@ -471,7 +478,7 @@
     app.component('prmFullViewServiceContainerAfter', {
         bindings: { parentCtrl: '<' },
         controller: 'libMapController',
-        template: '<div ng-show="$ctrl.showMap">' + '<code ng-show="$ctrl.debug" class="ic-debug">MAP PROBLEM</code>' + '           <br /><br />' + '           <div class="ic-map-div">' + '               <img class="ic-map-img" ng-src="{{$ctrl.mapFileLocation}}" ng-style="$ctrl.mapDimensions", title={{$ctrl.mapMessage}}>' + '               <canvas class="ic-map-canvas"></canvas>' + '           </div>' + '          </div>'
+        template: '<div ng-show="$ctrl.showMap"><i class="fa fa-map mapToggleMap"></i><a id="mapToggleLink" href="" class="arrow-link md-primoExplore-theme" ng-click="mapToggle=(mapToggle ? false : true)">Show a map of {{$ctrl.libraryName}}</a><prm-icon id="mapToggleIcon" link-arrow="" icon-type="svg" svg-icon-set="primo-ui" icon-definition="chevron-right"><md-icon id="mapToggleIcon" class="md-primoExplore-theme"></md-icon></prm-icon>' + '<div ng-if="mapToggle"><code ng-show="$ctrl.debug" class="ic-debug">MAP PROBLEM</code>' + '<br /><br />' + '<div class="ic-map-div">' + '<img class="ic-map-img" ng-src="{{$ctrl.mapFileLocation}}" ng-style="$ctrl.mapDimensions", title={{$ctrl.mapMessage}}>' + '<canvas class="ic-map-canvas"></canvas>' + '</div>' + '</div></div>'
     });
     
     // End final piece

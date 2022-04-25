@@ -59,7 +59,7 @@ prm-logo .logo-image, prm-logo img {
  }
  
  .prm-primary-bg.prm-hue1, prm-spinner.prm-hue1.overlay-cover.light-on-dark:after, prm-topbar .top-nav-bar, prm-search-bar.prm-hue1 {
-      background-color: #202C5F;
+      background-color: #041E42;
  }
  
  /*
@@ -88,8 +88,7 @@ prm-logo .logo-image, prm-logo img {
  md-fab-toolbar ._md-fab-action-item .md-button, prm-user-area 
  md-fab-toolbar .md-fab-action-item md-input-container, prm-user-area 
  md-fab
- -toolbar .
-  _md-fab-action-item md-input-container, .md-button.button-over-dark, prm-user-area .md-button.user-menu-button, prm-topbar .md-button {
+ -toolbar .md-fab-action-item md-input-container, .md-button.button-over-dark, prm-user-area .md-button.user-menu-button, prm-topbar .md-button {
      color: #FFFFFF;
  }
  
@@ -185,7 +184,8 @@ prm-main-menu[menu-type="menu"] .md-button {
 }
 
 .ic-loc-message{
-    font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;ont-size: 15px;
+    font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 15px;
     line-height: 1.5em;
     font-weight: 600;
     color: #44707b;
@@ -208,7 +208,7 @@ prm-main-menu[menu-type="menu"] .md-button {
 }
 /* End maps style */
 
-// Begin Aeon Stuff
+/* Begin Aeon Stuff */
 .aeonhelp {
   font-size: .8em;
   font-style: italic;

@@ -1,3 +1,4 @@
+@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css);
 @charset "utf-8";
 /* CSS Document for UKY Production  */
 
@@ -193,6 +194,18 @@ prm-main-menu[menu-type="menu"] .md-button {
 
 }
 
+#mapToggleLink:hover {
+    padding-right: 5px;
+}
+
+#mapToggleIcon {
+    color: #3d6e94;
+}
+.mapToggleMap {
+    color: #3d6e94;
+    padding-left: 20px;
+    padding-right: 5px;
+}
 /* End maps style */
 
 // Begin Aeon Stuff
@@ -282,3 +295,5 @@ span.umnHathiTrustLink:hover md-icon svg {
         #feedbackContent {
             padding: 20px;
         }
+
+        

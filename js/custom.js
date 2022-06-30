@@ -791,7 +791,6 @@ app.controller('prmSearchResultAvailabilityLineAfterController', function($scope
     controller: 'prmSearchResultAvailabilityLineAfterController',
     template: '\n    <aeon-request parent-ctrl="$ctrl.parentCtrl"></aeon-request><hathi-trust-availability></hathi-trust-availability>'
   });
-image.png  
   // Start Google Analytics 
     window.googleAnalytics = {}
     googleAnalytics.script = document.createElement("script");

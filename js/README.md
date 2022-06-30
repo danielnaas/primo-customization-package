@@ -1,7 +1,7 @@
 # Primo Customization Package, University of Kentucky
 
 
-##Current Integrations##
+## Current Integrations
 
 - Logo next to search box
 

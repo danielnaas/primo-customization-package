@@ -2,7 +2,106 @@
   "use strict";
   'use strict';
       
-  var app = angular.module('viewCustom', ['angularLoad', 'aeonRequest', 'floorMaps', 'logoTweaks','hathiTrustAvailability']);
+  var app = angular.module('viewCustom', ['angularLoad', 'aeonRequest', 'floorMaps', 'logoTweaks','hathiTrustAvailability','libChat','linksToKeep','finesNote']);
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+// Start universal header / footer stuff
+
+
+//// make the footer
+app.component('prmExploreFooterAfter', {
+  bindings: { parentCtrl: '<' },
+  controller: 'ukhdrController',
+  template: '<div></div>'
+});
+
+
+app.controller('ukhdrController', [function () {
+
+
+// individual links for secondary header
+let headerLinks = [
+{name:"hdr.include", content:"0"},
+{name:"hdr.home.label", content:"HOME"},
+{name:"hdr.home.link", content:"https://"},
+{name:"hdr.link1.label", content:"Link #1"},
+{name:"hdr.link1.url", content:"https://"},
+{name:"hdr.link2.label", content:"Link #2"},
+{name:"hdr.link2.url", content:"https://"},
+{name:"hdr.link3.label", content:"Link #3"},
+{name:"hdr.link3.url", content:"https://"},
+{name:"hdr.link4.label", content:"Link #4"},
+{name:"hdr.link4.url", content:"https://"},
+{name:"hdr.link5.label", content:"Link #5"},
+{name:"hdr.link5.url", content:"https://"},
+{name:"hdr.link6.label", content:"Link #6"},
+{name:"hdr.link6.url", content:"https://"},
+]
+
+let addHeaderLink = document.createElement("meta");
+for (let key in headerLinks) {
+let name = headerLinks[key]["name"];
+let content = headerLinks[key]["content"];
+console.log(name, content);
+addHeaderLink.name = name; 
+addHeaderLink.content = content;
+document.head.appendChild(addHeaderLink);
+addHeaderLink = document.createElement("meta");
+}
+
+
+
+// end individual links
+var addStuff = document.createElement("script");
+addStuff.type = "text/javascript"; 
+addStuff.src = "https://use.fontawesome.com/515bdf71f2.js";
+document.head.appendChild(addStuff);
+
+var addUKFooter = document.createElement("script");
+addUKFooter.type = "text/javascript"; 
+addUKFooter.src = "https://lib.uky.edu/webparts/ukhdr/2022/js/combofootershared.js";
+document.head.appendChild(addUKFooter);
+
+var addUKHeader = document.createElement("script");
+addUKHeader.type = "text/javascript"; 
+addUKHeader.src = "https://lib.uky.edu/webparts/ukhdr/2022/js/universalheader.js";
+document.head.appendChild(addUKHeader);
+
+var addHeaderFooterStyle = document.createElement("link");
+addHeaderFooterStyle.rel = "stylesheet"; 
+addHeaderFooterStyle.href = "https://lib.uky.edu/webparts/ukhdr/2022/css/global_header_footer.css";
+addHeaderFooterStyle.media = "all";
+document.head.appendChild(addHeaderFooterStyle);
+
+
+
+console.log("script for universal added"); 
+
+
+
+
+}]);
+
+// trigger the window load event after more of the page exists
+app.component('prmMainMenuAfter', {
+     bindings: { parentCtrl: '<' },
+     controller: function($scope) {
+          setTimeout(function() {
+
+          if(!document.getElementById("ukheader")) {
+            const event = new Event('load');
+            window.dispatchEvent(event);
+          }
+
+          }, 1000);
+     }
+
+     
+
+}); 
+
+
+// end header footer part
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,7 +220,7 @@ angular.module('aeonRequest', [])
         this.urlGenre = "";
       } else {
         self.linkLabel = "Submit Request to Access This Map";
-        this.urlGenre = "rft.genre=gwen";
+        this.urlGenre = "&rft.genre=map";
       }
 
       let urlCombined = this.urlGenre + this.urlTitle + this.urlCreator + this.urlCallNo + this.urlSubLoc + this.urlDate + this.urlSource;
@@ -147,11 +246,11 @@ angular.module('logoTweaks', [])
 .component('prmLogoAfter', {
     bindings: { parentCtrl: '<' },
     controller: 'prmLogoAfterController',
-    template: '<div class="product-logo product-logo-local" layout="row" id="banner" tabindex="0" role="banner">' + '<a title="UK Libraries Homepage" href="https://libraries.uky.edu"><img class="logo-image" alt="{{::(&apos;nui.header.LogoAlt&apos; | translate)}}" ng-src="{{$ctrl.getIconLink()}}"/></a></div>'
-})
+    template: '<div class="ukhdr-titlebox"><a class="ukhdr-title no-under" title="InfoKat Discovery Homepage" href="https://infokat.uky.edu">InfoKat Discovery</a><div>'
+  })
 .component('prmSearchBarAfter',{
         bindings: {parentCtrl: '<'},
-        template: '<div class="primo-search-logo"><a href="https://saalck-uky.primo.exlibrisgroup.com/discovery/search?vid=01SAA_UKY:UKY"><img ng-src="custom/01SAA_UKY-UKY/img/library-logo-s.png" src="custom/01SAA_UKY-UKY/img/library-logo-s.png" alt="InfoKat Discovery"></a></div><div id="scopeNoteBox"></div>' 
+        template: '<div class="primo-search-logo"></div><div id="scopeNoteBox"></div>' 
 });
 /////////////////////////////////////////////////////////////////////////////////////
 // Module: floorMaps
@@ -197,15 +296,15 @@ angular.module('floorMaps', [])
       this.location = '';
   }
 
-  var design = [{ location: "des", start_cn: " ", end_cn: " ", mapfile: "DesignLib_des.jpg", locMsg: "Pence Hall, Design Library, Book stacks." }, { location: "descd", start_cn: " ", end_cn: " ", mapfile: "DesignLib_checkatdesk.jpg", locMsg: "Pence Hall, Design Library, CDROM, ask at desk." }, { location: "desdraw", start_cn: " ", end_cn: " ", mapfile: "DesignLib_checkatdesk.jpg", locMsg: "Pence Hall, Design Library, drawings, ask at desk." }, { location: "desfilm", start_cn: " ", end_cn: " ", mapfile: "DesignLib_desfilm.jpg", locMsg: "Pence Hall, Design Library, Microfilm." }, { location: "desmap", start_cn: " ", end_cn: " ", mapfile: "DesignLib_checkatdesk.jpg", locMsg: "Pence Hall, Design Library, maps, ask at desk." }, { location: "desovsz", start_cn: " ", end_cn: " ", mapfile: "DesignLib_desovsz.jpg", locMsg: "Pence Hall, Design Library, oversized books." }, { location: "desres", start_cn: " ", end_cn: " ", mapfile: "DesignLib_checkatdesk.jpg", locMsg: "Pence Hall, Design Library, reserves, ask at desk." }, { location: "desser", start_cn: " ", end_cn: " ", mapfile: "DesignLib_desser.jpg", locMsg: "Pence Hall, Design Library, serials." }, { location: "desspcirc", start_cn: " ", end_cn: " ", mapfile: "DesignLib_checkatdesk.jpg", locMsg: "Pence Hall, Design Library, ask at desk." }, { location: "desspec", start_cn: " ", end_cn: " ", mapfile: "DesignLib_checkatdesk.jpg", locMsg: "Pence Hall, Design Library, ask at desk." }, { location: "desunder", start_cn: " ", end_cn: " ", mapfile: "DesignLib_desovsz.jpg", locMsg: "Pence Hall, Design Library, undersized books." }];
+  var design = [{ location: "des", start_cn: " ", end_cn: " ", mapfile: "DesignLib_des.jpg", locMsg: "Pence Hall, Design Library, Book stacks." }, { location: "descd", start_cn: " ", end_cn: " ", mapfile: "DesignLib_checkatdesk.jpg", locMsg: "Pence Hall, Design Library, CDROM, ask at desk." }, { location: "desdraw", start_cn: " ", end_cn: " ", mapfile: "DesignLib_checkatdesk.jpg", locMsg: "Pence Hall, Design Library, drawings, ask at desk." }, { location: "desfilm", start_cn: " ", end_cn: " ", mapfile: "DesignLib_desfilm.jpg", locMsg: "Pence Hall, Design Library, Microfilm." }, { location: "desmap", start_cn: " ", end_cn: " ", mapfile: "DesignLib_checkatdesk.jpg", locMsg: "Pence Hall, Design Library, maps, ask at desk." }, { location: "desovsz", start_cn: " ", end_cn: " ", mapfile: "DesignLib_desovsz.jpg", locMsg: "Pence Hall, Design Library, oversized books." }, { location: "desres", start_cn: " ", end_cn: " ", mapfile: "DesignLib_checkatdesk.jpg", locMsg: "Pence Hall, Design Library, reserves, ask at desk." }, { location: "desser", start_cn: " ", end_cn: " ", mapfile: "DesignLib_desser.jpg", locMsg: "Pence Hall, Design Library, serials." }, { location: "desspcirc", start_cn: " ", end_cn: " ", mapfile: "DesignLib_checkatdesk.jpg", locMsg: "Pence Hall, Design Library, ask at desk." }, { location: "desunder", start_cn: " ", end_cn: " ", mapfile: "DesignLib_desovsz.jpg", locMsg: "Pence Hall, Design Library, undersized books." }];
 
-  var young = [{ location: "0CCCline5", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "0CCSeago6", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "None", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "UNASSIGNED", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "cm1st", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_refdesk.jpg", locMsg: "Young Library, 2nd floor, north wing, ask at reference desk." }, { location: "gluck", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_refdesk.jpg", locMsg: "Young Library, 2nd floor, north wing, ask at reference desk." }, { location: "ill", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "kyprob", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_refdesk.jpg", locMsg: "Young Library, 2nd floor, north wing, ask at reference desk." }, { location: "mcyl5rot", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_ylthes.jpg", locMsg: "Young Library, 5th floor, central rotunda and north wing." }, { location: "mcylbook3", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary3_yl3.jpg", locMsg: "Young Library, 3rd floor, north and east wings, call number A to DX." }, { location: "mcylbook4", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary4_yl4.jpg", locMsg: "Young Library, 4th floor, call number E to PR." }, { location: "mcylbook5", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_yl5.jpg", locMsg: "Young Library, 5th floor, south and west wings, call number PR to Z." }, { location: "mcylcomp", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary3_ylai.jpg", locMsg: "Young Library, 3rd floor, south, west and north wings." }, { location: "mcylnine", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary3_mcylnine.jpg", locMsg: "Young Library, 3rd floor, north wing." }, { location: "mcylovsz", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_ylovsz.jpg", locMsg: "Young Library, 5th floor, west and north wings." }, { location: "mcylthes", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_ylthes.jpg", locMsg: "Young Library, 5th floor, north wing and central rotunda." }, { location: "percard", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_per.jpg", locMsg: "Young Library, 2nd floor, east wing, ask at periodicals desk." }, { location: "perfaofich", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_per.jpg", locMsg: "Young Library, 2nd floor, east wing, ask at periodicals desk." }, { location: "perfich", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_per.jpg", locMsg: "Young Library, 2nd floor, east wing, ask at periodicals desk." }, { location: "perfichk", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_per.jpg", locMsg: "Young Library, 2nd floor, east wing, ask at periodicals desk." }, { location: "perfilm", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_per.jpg", locMsg: "Young Library, 2nd floor, east wing, ask at periodicals desk." }, { location: "perkynews", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_per.jpg", locMsg: "Young Library, 2nd floor, east wing, ask at periodicals desk." }, { location: "permprnt", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_per.jpg", locMsg: "Young Library, 2nd floor, east wing, ask at periodicals desk." }, { location: "pernews", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_per.jpg", locMsg: "Young Library, 2nd floor, east wing, ask at periodicals desk." }, { location: "perrstr", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_per.jpg", locMsg: "Young Library, 2nd floor, east wing, ask at periodicals desk." }, { location: "probacq", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "ref", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_ref.jpg", locMsg: "Young Library, 2nd floor, west wing." }, { location: "refcd", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_refdesk.jpg", locMsg: "Young Library, 2nd floor, north wing, ask at reference desk." }, { location: "refcds", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_refdesk.jpg", locMsg: "Young Library, 2nd floor, north wing, ask at reference desk." }, { location: "refdisks", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_refdesk.jpg", locMsg: "Young Library, 2nd floor, north wing, ask at reference desk." }, { location: "refo", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_refo.jpg", locMsg: "Young Library, 2nd floor, west wing." }, { location: "refrdr", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_refdesk.jpg", locMsg: "Young Library, 2nd floor, north wing, ask at reference desk." }, { location: "refrdrmf", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_refdesk.jpg", locMsg: "Young Library, 2nd floor, north wing, ask at reference desk." }, { location: "refrdrsd", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_refdesk.jpg", locMsg: "Young Library, 2nd floor, north wing, ask at reference desk." }, { location: "refsd", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_refsd.jpg", locMsg: "Young Library, 2nd floor, west wing." }, { location: "refsdcens", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_refsdcens.jpg", locMsg: "Young Library, 2nd floor, west wing." }, { location: "sd", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_ylsd.jpg", locMsg: "Young Library, 5th floor, government publications." }, { location: "sdfich", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_per.jpg", locMsg: "Young Library, 2nd floor, east wing, ask at periodicals desk." }, { location: "sdfilm", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_per.jpg", locMsg: "Young Library, 2nd floor, east wing, ask at periodicals desk." }, { location: "sdload", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_refdesk.jpg", locMsg: "Young Library, 2nd floor, north wing, ask at reference desk." }, { location: "sdrdx", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_per.jpg", locMsg: "Young Library, 2nd floor, east wing, ask at periodicals desk." }, { location: "yl", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_refdesk.jpg", locMsg: "Young Library, 2nd floor, north wing, ask at reference desk." }, { location: "yl1d", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "yl2h", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "yl3", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary3_yl3.jpg", locMsg: "Young Library, 3rd floor, north and east wings, call number A to DX." }, { location: "yl3d", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "yl4", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary4_yl4.jpg", locMsg: "Young Library, 4th floor, call number E to PR." }, { location: "yl5", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_yl5.jpg", locMsg: "Young Library, 5th floor, south and west wings, call number PR to Z." }, { location: "yl5rot", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_ylthes.jpg", locMsg: "Young Library, 5th floor, central rotunda." }, { location: "yl7d", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "ylai", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary3_ylai.jpg", locMsg: "Young Library, 3rd floor, south, west and north wings." }, { location: "ylcirc", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "yleu", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_yleu.jpg", locMsg: "Young Library, 5th floor, north wing." }, { location: "ylfich", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_per.jpg", locMsg: "Young Library, 2nd floor, east wing, ask at periodicals desk." }, { location: "ylfilm", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_per.jpg", locMsg: "Young Library, 2nd floor, east wing, ask at periodicals desk." }, { location: "ylgb", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_ylgb.jpg", locMsg: "Young Library, 5th floor, north wing." }, { location: "ylgrnsl", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_ylgrnsl.jpg", locMsg: "Young Library, 2nd floor, central rotunda." }, { location: "ylhold", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary3_ylhold.jpg", locMsg: "Young Library, 3rd floor, north wing." }, { location: "yllon", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_yllon.jpg", locMsg: "Young Library, 5th floor, north wing." }, { location: "ylmedia", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary0_ylmedia.jpg", locMsg: "Young Library, basement, ask at audio visual desk." }, { location: "ylmedia7d", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary0_ylmedia.jpg", locMsg: "Young Library, basement, ask at audio visual desk." }, { location: "ylmediacir", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary0_ylmedia.jpg", locMsg: "Young Library, basement, ask at audio visual desk." }, { location: "ylmediares", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary0_ylmedia.jpg", locMsg: "Young Library, basement, ask at audio visual desk." }, { location: "ylnew", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_ylnew.jpg", locMsg: "Young Library, 1st floor, next to central staircase." }, { location: "ylovsz", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_ylovsz.jpg", locMsg: "Young Library, 5th floor, west and north wings." }, { location: "ylper", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary3_ylai.jpg", locMsg: "Young Library, 3rd floor, south, west and north wings." }, { location: "ylpero", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary3_ylpero.jpg", locMsg: "Young Library, 3rd floor, north wing." }, { location: "ylpersdu", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary3_ylpersdu.jpg", locMsg: "Young Library, 3rd floor, north wing." }, { location: "ylprbd", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "ylpres", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "ylprlbl", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "ylprlt", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "ylprps", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "ylprrf", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "ylres", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "ylscott", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_ylgrnsl.jpg", locMsg: "Young Library, 2nd floor, central rotunda." }, { location: "ylsd", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_ylsd.jpg", locMsg: "Young Library, 5th floor, north and east wings." }, { location: "ylsdov", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_ylsd.jpg", locMsg: "Young Library, 5th floor, north wing." }, { location: "ylthes", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_ylthes.jpg", locMsg: "Young Library 5th floor, north wing." }, { location: "ylun", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_ylun.jpg", locMsg: "Young Library, 5th floor, north wing." }, { location: "ymoncat", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "ymonproctr", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "ysercat", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "yserproctr", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }];
+  var young = [{ location: "0CCCline5", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "0CCSeago6", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "None", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "UNASSIGNED", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "cm1st", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "gluck", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "ill", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "kyprob", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "mcyl5rot", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_ylthes.jpg", locMsg: "Young Library, 5th floor, central rotunda and north wing." }, { location: "mcylbook3", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary3_yl3.jpg", locMsg: "Young Library, 3rd floor, north and east wings, call number A to DX." }, { location: "mcylbook4", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary4_yl4.jpg", locMsg: "Young Library, 4th floor, call number E to PR." }, { location: "mcylbook5", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_yl5.jpg", locMsg: "Young Library, 5th floor, south and west wings, call number PR to Z." }, { location: "mcylcomp", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary3_ylai.jpg", locMsg: "Young Library, 3rd floor, south, west and north wings." }, { location: "mcylnine", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary3_mcylnine.jpg", locMsg: "Young Library, 3rd floor, north wing." }, { location: "mcylovsz", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_ylovsz.jpg", locMsg: "Young Library, 5th floor, west and north wings." }, { location: "mcylthes", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_ylthes.jpg", locMsg: "Young Library, 5th floor, north wing and central rotunda." }, { location: "percard", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "perfaofich", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "perfich", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "perfichk", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "perfilm", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "perkynews", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "permprnt", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "pernews", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "perrstr", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "probacq", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "ref", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_ref.jpg", locMsg: "Young Library, 2nd floor, west wing." }, { location: "refcd", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "refcds", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "refdisks", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "refo", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_refo.jpg", locMsg: "Young Library, 2nd floor, west wing." }, { location: "refrdr", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "refrdrmf", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "refrdrsd", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "refsd", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_refsd.jpg", locMsg: "Young Library, 2nd floor, west wing." }, { location: "refsdcens", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_refsdcens.jpg", locMsg: "Young Library, 2nd floor, west wing." }, { location: "sd", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_ylsd.jpg", locMsg: "Young Library, 5th floor, government publications." }, { location: "sdfich", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "sdfilm", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "sdload", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "sdrdx", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "yl", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "yl1d", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "yl2h", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "yl3", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary3_yl3.jpg", locMsg: "Young Library, 3rd floor, north and east wings, call number A to DX." }, { location: "yl3d", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "yl4", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary4_yl4.jpg", locMsg: "Young Library, 4th floor, call number E to PR." }, { location: "yl5", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_yl5.jpg", locMsg: "Young Library, 5th floor, south and west wings, call number PR to Z." }, { location: "yl5rot", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_ylthes.jpg", locMsg: "Young Library, 5th floor, central rotunda." }, { location: "yl7d", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "ylai", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary3_ylai.jpg", locMsg: "Young Library, 3rd floor, south, west and north wings." }, { location: "ylcirc", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "yleu", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_yleu.jpg", locMsg: "Young Library, 5th floor, north wing." }, { location: "ylfich", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "ylfilm", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "ylgb", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_ylgb.jpg", locMsg: "Young Library, 5th floor, north wing." }, { location: "ylgrnsl", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_ylgrnsl.jpg", locMsg: "Young Library, 2nd floor, central rotunda." }, { location: "ylhold", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary3_ylhold.jpg", locMsg: "Young Library, 3rd floor, north wing." }, { location: "yllon", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_yllon.jpg", locMsg: "Young Library, 5th floor, north wing." }, { location: "ylmedia", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "ylmedia7d", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "ylmediacir", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "ylmediares", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, ask at 1st floor circulation desk." }, { location: "ylnew", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_ylnew.jpg", locMsg: "Young Library, 1st floor, next to central staircase." }, { location: "ylovsz", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_ylovsz.jpg", locMsg: "Young Library, 5th floor, west and north wings." }, { location: "ylper", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary3_ylai.jpg", locMsg: "Young Library, 3rd floor, south, west and north wings." }, { location: "ylpero", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary3_ylpero.jpg", locMsg: "Young Library, 3rd floor, north wing." }, { location: "ylpersdu", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary3_ylpersdu.jpg", locMsg: "Young Library, 3rd floor, north wing." }, { location: "ylprbd", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "ylpres", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "ylprlbl", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "ylprlt", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "ylprps", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "ylprrf", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "ylres", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "ylscott", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary2_ylgrnsl.jpg", locMsg: "Young Library, 2nd floor, central rotunda." }, { location: "ylsd", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_ylsd.jpg", locMsg: "Young Library, 5th floor, north and east wings." }, { location: "ylsdov", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_ylsd.jpg", locMsg: "Young Library, 5th floor, north wing." }, { location: "ylthes", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_ylthes.jpg", locMsg: "Young Library 5th floor, north wing." }, { location: "ylun", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary5_ylun.jpg", locMsg: "Young Library, 5th floor, north wing." }, { location: "ymoncat", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "ymonproctr", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "ysercat", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }, { location: "yserproctr", start_cn: " ", end_cn: " ", mapfile: "YoungLibrary1_circ.jpg", locMsg: "Young Library, 1st floor, ask at circulation desk." }];
 
   var agriculture = [{ location: "ag1d", start_cn: " ", end_cn: " ", mapfile: "AgInfoCenter_ask.jpg", locMsg: "Agriculture Science North building, AIC, ask at service desk." }, { location: "ag2h", start_cn: " ", end_cn: " ", mapfile: "AgInfoCenter_ask.jpg", locMsg: "Agriculture Science North building, AIC, ask at service desk." }, { location: "ag3d", start_cn: " ", end_cn: " ", mapfile: "AgInfoCenter_ask.jpg", locMsg: "Agriculture Science North building, AIC, ask at service desk." }, { location: "agcirc", start_cn: " ", end_cn: " ", mapfile: "AgInfoCenter_ask.jpg", locMsg: "Agriculture Science North building, AIC, ask at service desk." }, { location: "agref", start_cn: " ", end_cn: " ", mapfile: "AgInfoCenter_agref.jpg", locMsg: "Agriculture Science North building, AIC, reference." }, { location: "agres", start_cn: " ", end_cn: " ", mapfile: "AgInfoCenter_agres.jpg", locMsg: "Agriculture Science North building, AIC, reserves." }, { location: "agser", start_cn: " ", end_cn: " ", mapfile: "AgInfoCenter_agser.jpg", locMsg: "Agriculture Science North building, AIC, current serials." }, { location: "agvid", start_cn: " ", end_cn: " ", mapfile: "AgInfoCenter_ask.jpg", locMsg: "Agriculture Science North building, AIC, ask at service desk." }];
 
   var education = [{ location: "ed", start_cn: " ", end_cn: " ", mapfile: "EducationLibrary_ed.jpg", locMsg: "Dickey Hall, 2nd floor, Education Library, books." }, { location: "ed1d", start_cn: " ", end_cn: " ", mapfile: "EducationLibrary_ask.jpg", locMsg: "Dickey Hall, 2nd floor, Education Library, ask at service desk." }, { location: "edaward", start_cn: " ", end_cn: " ", mapfile: "EducationLibrary_ed.jpg", locMsg: "Dickey Hall, 2nd floor, Education Library, books." }, { location: "edbutler", start_cn: " ", end_cn: " ", mapfile: "EducationLibrary_ask.jpg", locMsg: "Dickey Hall, 2nd floor, Education Library, ask at service desk." }, { location: "edcirc", start_cn: " ", end_cn: " ", mapfile: "EducationLibrary_ask.jpg", locMsg: "Dickey Hall, 2nd floor, Education Library, ask at service desk." }, { location: "ederfich", start_cn: " ", end_cn: " ", mapfile: "EducationLibrary_ask.jpg", locMsg: "Dickey Hall, 2nd floor, Education Library, ask at service desk." }, { location: "edfich", start_cn: " ", end_cn: " ", mapfile: "EducationLibrary_ask.jpg", locMsg: "Dickey Hall, 2nd floor, Education Library, ask at service desk." }, { location: "edfilm", start_cn: " ", end_cn: " ", mapfile: "EducationLibrary_ask.jpg", locMsg: "Dickey Hall, 2nd floor, Education Library, ask at service desk." }, { location: "edjfic", start_cn: " ", end_cn: " ", mapfile: "EducationLibrary_ed.jpg", locMsg: "Dickey Hall, 2nd floor, Education Library, books." }, { location: "edjnonfic", start_cn: " ", end_cn: " ", mapfile: "EducationLibrary_ed.jpg", locMsg: "Dickey Hall, 2nd floor, Education Library, books." }, { location: "edjpicbks", start_cn: " ", end_cn: " ", mapfile: "EducationLibrary_ed.jpg", locMsg: "Dickey Hall, 2nd floor, Education Library, books." }, { location: "edjya", start_cn: " ", end_cn: " ", mapfile: "EducationLibrary_ed.jpg", locMsg: "Dickey Hall, 2nd floor, Education Library, books." }, { location: "edres", start_cn: " ", end_cn: " ", mapfile: "EducationLibrary_ask.jpg", locMsg: "Dickey Hall, 2nd floor, Education Library, ask at service desk." }, { location: "edser", start_cn: " ", end_cn: " ", mapfile: "EducationLibrary_ed.jpg", locMsg: "Dickey Hall, 2nd floor, Education Library, books." }, { location: "edtext", start_cn: " ", end_cn: " ", mapfile: "EducationLibrary_ask.jpg", locMsg: "Dickey Hall, 2nd floor, Education Library, ask at service desk." }, { location: "edyanonfic", start_cn: " ", end_cn: " ", mapfile: "EducationLibrary_ed.jpg", locMsg: "Dickey Hall, 2nd floor, Education Library, books." }, { location: "probeduc", start_cn: " ", end_cn: " ", mapfile: "EducationLibrary_ask.jpg", locMsg: "Dickey Hall, 2nd floor, Education Library, ask at service desk." }];
 
-  var finearts = [{ location: "fa", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary2_fa.jpg", locMsg: "Little Fine Arts Library, 2nd floor, books, collected editions, scores." }, { location: "fa1h", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, reserves, ask at desk." }, { location: "faartbk", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, ask at desk." }, { location: "facat", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, ask at desk." }, { location: "facd", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, CDROM, ask at desk." }, { location: "facirc", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, ask at desk." }, { location: "facoll", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary2_facoll.jpg", locMsg: "Little Fine Arts Library, 2nd floor, collected editions shelves." }, { location: "famctr", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, media center, ask at desk." }, { location: "famctrres", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, ask at desk." }, { location: "famfrm", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_famfrm.jpg", locMsg: "Little Fine Arts Library, 1st floor, microforms room." }, { location: "famini", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary2_famini.jpg", locMsg: "Little Fine Arts Library, 2nd floor, miniature scores." }, { location: "faniles", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, ask at desk." }, { location: "faovsz", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary2_faovsz.jpg", locMsg: "Little Fine Arts Library, 2nd floor, oversized book shelves." }, { location: "faovszsc", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary2_faovszsc.jpg", locMsg: "Little Fine Arts Library, 2nd floor, oversize score shelves." }, { location: "faport", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary2_faport.jpg", locMsg: "Little Fine Arts Library, 2nd floor, portfolios, all the way to the back." }, { location: "faref", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_faref.jpg", locMsg: "Little Fine Arts Library, 1st floor, reference." }, { location: "fares", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, reserves, ask at desk." }, { location: "faspec", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, ask at desk." }, { location: "faspecovsz", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, ask at desk." }, { location: "fawilcox", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, ask at desk." }, { location: "fagranovel", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_fagranovel.jpg", locMsg: "Little Fine Arts Library, 1st floor, graphic novels." }];
+  var finearts = [{ location: "fa", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary2_fa.jpg", locMsg: "Little Fine Arts Library, 2nd floor, books, collected editions, scores." }, { location: "fa1h", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, reserves, ask at desk." }, { location: "faartbk", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, ask at desk." }, { location: "facat", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, ask at desk." }, { location: "facd", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, CDROM, ask at desk." }, { location: "facirc", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, ask at desk." }, { location: "facoll", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary2_facoll.jpg", locMsg: "Little Fine Arts Library, 2nd floor, collected editions shelves." }, { location: "famctr", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, media center, ask at desk." }, { location: "famctrres", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, ask at desk." }, { location: "famfrm", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_famfrm.jpg", locMsg: "Little Fine Arts Library, 1st floor, microforms room." }, { location: "famini", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary2_famini.jpg", locMsg: "Little Fine Arts Library, 2nd floor, miniature scores." }, { location: "faniles", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, ask at desk." }, { location: "faovsz", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary2_faovsz.jpg", locMsg: "Little Fine Arts Library, 2nd floor, oversized book shelves." }, { location: "faovszsc", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary2_faovszsc.jpg", locMsg: "Little Fine Arts Library, 2nd floor, oversize score shelves." }, { location: "faport", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary2_faport.jpg", locMsg: "Little Fine Arts Library, 2nd floor, portfolios, all the way to the back." }, { location: "faref", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_faref.jpg", locMsg: "Little Fine Arts Library, 1st floor, reference." }, { location: "fares", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, reserves, ask at desk." }, { location: "faspec", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, ask at desk." }, { location: "faspecovsz", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, ask at desk." }, { location: "fawilcox", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_facirc.jpg", locMsg: "Little Fine Arts Library, ask at desk." }, { location: "fagranovel", start_cn: " ", end_cn: " ", mapfile: "LittleLibrary1_fagranovel.jpg", locMsg: "Little Fine Arts Library, 1st floor, graphic novels." }, { location: "desspec", start_cn: " ", end_cn: " ", mapfile: "DesignLib_checkatdesk.jpg", locMsg: "Fine Arts Library, ask at desk." }];
 
   var medicalcenter = [{ location: "mcarch", start_cn: " ", end_cn: " ", mapfile: "MCL_ask.jpg", locMsg: "Williard Medical Education building, Medical Center Library, ask at service desk." }, { location: "mcav", start_cn: " ", end_cn: " ", mapfile: "MCL_ask.jpg", locMsg: "Williard Medical Education building, Medical Center Library, ask at service desk." }, { location: "mcavjr", start_cn: " ", end_cn: " ", mapfile: "MCL_ask.jpg", locMsg: "Williard Medical Education building, Medical Center Library, ask at service desk." }, { location: "mcavr4", start_cn: " ", end_cn: " ", mapfile: "MCL_ask.jpg", locMsg: "Williard Medical Education building, Medical Center Library, ask at service desk." }, { location: "mcavrs", start_cn: " ", end_cn: " ", mapfile: "MCL_ask.jpg", locMsg: "Williard Medical Education building, Medical Center Library, ask at service desk." }, { location: "mcbind", start_cn: " ", end_cn: " ", mapfile: "MCL_ask.jpg", locMsg: "Williard Medical Education building, Medical Center Library, ask at service desk." }, { location: "mcbook", start_cn: " ", end_cn: " ", mapfile: "MCL_ask.jpg", locMsg: "Williard Medical Education building, Medical Center Library, ask at service desk." }, { location: "mccat", start_cn: " ", end_cn: " ", mapfile: "MCL_ask.jpg", locMsg: "Williard Medical Education building, Medical Center Library, ask at service desk." }, { location: "mccd", start_cn: " ", end_cn: " ", mapfile: "MCL_ask.jpg", locMsg: "Williard Medical Education building, Medical Center Library, ask at service desk." }, { location: "mccirc", start_cn: " ", end_cn: " ", mapfile: "MCL_ask.jpg", locMsg: "Williard Medical Education building, Medical Center Library, ask at service desk." }, { location: "mccl1d", start_cn: " ", end_cn: " ", mapfile: "MCL_ask.jpg", locMsg: "Williard Medical Education building, Medical Center Library, ask at service desk." }, { location: "mccl2d", start_cn: " ", end_cn: " ", mapfile: "MCL_ask.jpg", locMsg: "Williard Medical Education building, Medical Center Library, ask at service desk." }, { location: "mccl7d", start_cn: " ", end_cn: " ", mapfile: "MCL_ask.jpg", locMsg: "Williard Medical Education building, Medical Center Library, ask at service desk." }, { location: "mcclas", start_cn: " ", end_cn: " ", mapfile: "MCL_ask.jpg", locMsg: "Williard Medical Education building, Medical Center Library, ask at service desk." }, { location: "mcclic", start_cn: " ", end_cn: " ", mapfile: "MCL_mcclic.jpg", locMsg: "Williard Medical Education building, Medical Center Library, classics." }, { location: "mcill", start_cn: " ", end_cn: " ", mapfile: "MCL_ask.jpg", locMsg: "Williard Medical Education building, Medical Center Library, ask at service desk." }, { location: "mcinab", start_cn: " ", end_cn: " ", mapfile: "MCL_mcinab.jpg", locMsg: "Williard Medical Education building, Medical Center Library, indexes and abstracts." }, { location: "mcinal", start_cn: " ", end_cn: " ", mapfile: "MCL_ask.jpg", locMsg: "Williard Medical Education building, Medical Center Library, ask at service desk." }, { location: "mcjour", start_cn: " ", end_cn: " ", mapfile: "MCL_ask.jpg", locMsg: "Williard Medical Education building, Medical Center Library, ask at service desk." }, { location: "mcovsz", start_cn: " ", end_cn: " ", mapfile: "MCL_ask.jpg", locMsg: "Williard Medical Education building, Medical Center Library, ask at service desk." }, { location: "mcrefb", start_cn: " ", end_cn: " ", mapfile: "MCL_mcrefb.jpg", locMsg: "Williard Medical Education building, Medical Center Library, reference." }, { location: "mcres", start_cn: " ", end_cn: " ", mapfile: "MCL_mcres.jpg", locMsg: "Williard Medical Education building, Medical Center Library, permanent reserves." }, { location: "mcrs", start_cn: " ", end_cn: " ", mapfile: "MCL_ask.jpg", locMsg: "Williard Medical Education building, Medical Center Library, ask at service desk." }, { location: "mcstaf", start_cn: " ", end_cn: " ", mapfile: "MCL_ask.jpg", locMsg: "Williard Medical Education building, Medical Center Library, ask at service desk." }, { location: "mcunbo", start_cn: " ", end_cn: " ", mapfile: "MCL_mcunbo.jpg", locMsg: "Williard Medical Education building, Medical Center Library, unbound journals." }, { location: "medproc", start_cn: " ", end_cn: " ", mapfile: "MCL_ask.jpg", locMsg: "Williard Medical Education building, Medical Center Library, ask at service desk." }, { location: "medproctr", start_cn: " ", end_cn: " ", mapfile: "MCL_ask.jpg", locMsg: "Williard Medical Education building, Medical Center Library, ask at service desk." }];
 
@@ -794,38 +893,123 @@ app.controller('prmSearchResultAvailabilityLineAfterController', function($scope
   // Start Google Analytics 
     window.googleAnalytics = {}
     googleAnalytics.script = document.createElement("script");
-    googleAnalytics.script.src = "https://www.googletagmanager.com/gtag/js?id=UA-136163678-1";
-    googleAnalytics.async = "";
+    googleAnalytics.script.src = "https://www.googletagmanager.com/gtag/js?id=G-M0PE7RCRHY";
+    googleAnalytics.async = "true";
     document.head.appendChild(googleAnalytics.script);
    
     window.googleAnalytics2 = {}
     googleAnalytics2.script = document.createElement("script");
-    googleAnalytics2.script.innerHTML = "  window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'UA-136163678-1');";
+    googleAnalytics2.script.innerHTML = "  window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-M0PE7RCRHY');";
     document.head.appendChild(googleAnalytics2.script);
   
   // End Google Analytics
-  
-  // Other Google Analytics stuff
-  app.constant('googleAnalyticsConfig', {
-    trackingId: 'UA-136163678-1',
-    // use null to specify an external script shouldn't be loaded
-    externalScriptURL: null,
-    // copy from script snippet from Google if you're running legacy Google Analytics
-    inlineScript: `
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-136163678-1']);
-      _gaq.push(['_trackPageview']);
-   
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    `
-  })
+
       
+// SiteImprove Stuff 
+  window.siteImprove = {}
+  siteImprove.script = document.createElement("script");
+  siteImprove.script.src = "https://siteimproveanalytics.com/js/siteanalyze_3628.js";
+  siteImprove.async = "true";
+  document.head.appendChild(siteImprove.script);
 
 
+    // Adapted from Bond University Primo 
+    // https://librarysearch.bond.edu.au/discovery/search?vid=61BOND_INST:BOND
+		// Instantiate variables that will be reset repeatedly in the listener function
+		var max = 0;
+		var winHeight = 0;
+		var scrollTop = 0;
+		var foot = 0;
+		// and let's have a small buffer before the footer
+		var buffer = 50;
+		window.addEventListener('scroll', function (e) {
 
+			// Total length of document
+			max = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight, document.body.offsetHeight, document.documentElement.offsetHeight, document.body.clientHeight, document.documentElement.clientHeight);
+			// Height of window
+			winHeight = window.innerHeight || (document.documentElement || document.body).clientHeight;
+			// Point of the top of the document visible on screen
+			scrollTop = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop;
+			// Height of footer
+			foot = Math.round(parseFloat(window.getComputedStyle(document.getElementById('ukfooter')).height));
+			// check where we are in terms of scrolling and the footer
+			if (scrollTop + winHeight >= max - foot) {
+				document.querySelectorAll('.primo-scrollbar.is-stuck')[0].style.maxHeight = 'calc(100% - ' + Math.abs(max - winHeight - scrollTop - foot - buffer) + 'px)';
+			} else {
+				document.querySelectorAll('.primo-scrollbar.is-stuck')[0].style.maxHeight = 'calc(100% - 2em)';
+			}
+    })
 
+/////////////////////////////////////////////////////////////////////////////////////
+// Module: libChat
+
+// Start chat
+angular.module('libChat', [])
+.controller('chatBox', [function () {
+    console.log("start chat script");
+    var lc = document.createElement('script'); 
+    lc.type = 'text/javascript'; 
+    lc.async = 'true';
+    lc.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'v2.libanswers.com/load_chat.php?hash=79e25f267bd8a74fe0647b277141f6a2';
+    var s = document.getElementsByTagName('script')[0]; 
+    s.parentNode.insertBefore(lc, s);
+    console.log("end chat script");
+}]).component('prmTopBarBefore', {
+    bindings: { parentCtrl: '<' },
+    controller: 'chatBox',
+});
+
+// End chat
+/////////////////////////////////////////////////////////////////////////////////////   
+// module: linksToKeep
+// From Orbis Cascade Primo Toolkit: https://www.orbiscascade.org/programs/systems/pcsg/primo-ve-toolkit/hide-856-links/
+angular.module('linksToKeep', []).component('prmServiceLinksAfter', {
+  bindings: {
+    parentCtrl: '<'
+  },
+  controller: function controller($document, linksToKeep) {
+    angular.element(function () {
+      if (linksToKeep.length > 0) {
+        var lNodes = $document[0].querySelectorAll("prm-service-links > div > div > div");
+        for (var i = 0; i < lNodes.length; i++) {
+          console.log("reviewing link text");
+          var eNode = lNodes[i];
+          var span = eNode.querySelector("a > span");
+          if (span != null) {
+            if (!linksToKeep.includes(span.textContent.trim())) {
+              eNode.style.display = "none";
+            }
+          }
+        }
+      }
+    });
+  }
+}).value('linksToKeep', [
+  "Terms of Use for Electronic Resources",
+  "Display MARC cataloging record",
+  "Check UK Library holdings for the journal.",
+  "DOI Link",
+  "Journal's Impact Factor according to InCites JCR",
+  "ProQuest Dissertation Articles DIRECT LINK",
+  "ProQuest dissertation DIRECT LINK"
+]);
+
+////////////////////
+// Start fines note
+angular.module('finesNote', [])
+.component('prmFinesAfter', {
+  bindings: { parentCtrl: '<' },
+  controller: 'prmFinesAfterController',
+  template: `<div id="finesAnnounce" class="in-element-dialog-context layout-row flex" layout="row">
+              <div id="finesAnnounceNote"><p>Through March 31 we are accepting food and personal care items as "payment" for up to $20 of qualifying fines.  <a href="https://libraries.uky.edu/news/uk-libraries-patrons-invited-pay-library-fines-support-big-blue-pantry">Please visit our site for more information.</a> </p></div>
+             </div>`
+})
+.controller('prmFinesAfterController', ['$scope', function($scope) {
+  this.$onInit = function () {
+    let ctrl = this;
+    console.log("fine box triggered");
+    console.log(ctrl.parentCtrl);
+    console.log($scope.$parent.$ctrl);
+
+}}]);
   })();

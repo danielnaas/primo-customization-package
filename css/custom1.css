@@ -55,11 +55,11 @@ prm-logo .logo-image, prm-logo img {
  /* background-color */
  .prm-primary-bg, prm-browse-search-bar, prm-journals-search-bar, prm-search-bar, prm-spinner.overlay-cover.light-on-dark:after, prm-tags-search-bar {
     color: #fff;
-    background-color: #143887;
+    background-color: #0033a0;
  }
  
  .prm-primary-bg.prm-hue1, prm-spinner.prm-hue1.overlay-cover.light-on-dark:after, prm-topbar .top-nav-bar, prm-search-bar.prm-hue1 {
-      background-color: #041E42;
+      background-color: #0033a0;
  }
  
  /*
@@ -96,12 +96,12 @@ prm-logo .logo-image, prm-logo img {
  
  /* Search Bar background-color */
  .prm-primary-bg, prm-browse-search-bar, prm-atoz-search-bar, prm-journals-search-bar, prm-search-bar, prm-spinner.overlay-cover.light-on-dark:after, prm-search-bar {
-     background-color: #143887;
+     background-color: #0033a0;
  }
 
  /*   hue3 section of color rules */
 .prm-primary-bg.prm-hue3-important,prm-browse-search-bar.prm-hue3-important,prm-journals-search-bar.prm-hue3-important,prm-search-bar.prm-hue3-important,prm-spinner.prm-hue3-important.overlay-cover.light-on-dark:after,prm-tags-search-bar.prm-hue3-important,prm-user-area md-fab-toolbar.md-is-open md-fab-trigger ._md-fab-toolbar-background,prm-user-area md-fab-toolbar.md-is-open md-fab-trigger .md-fab-toolbar-background {
-    background-color: #202C5F !important
+    background-color: #0033a0 !important
 }
 
 /* Disable Language choice  */
@@ -296,4 +296,53 @@ span.umnHathiTrustLink:hover md-icon svg {
             padding: 20px;
         }
 
-        
+/* Universal Header and Footer parts */
+
+.ukhdr-titlebox {
+    padding: 10px 0px 10px 20px;
+}
+
+.ukhdr-title {
+	color: white;
+	font-family:"AvenirNextLT", sans-serif;
+	font-size:16px;
+}
+@media (min-width: 1200px) {
+    .ukhdr-titlebox {
+        width: 350px;
+    }
+    .ukhdr-title {
+        font-size: 28px;
+    }
+}
+
+/* Tweak for Primo wanting to underline the universal header links */
+a.no-under {    
+    box-shadow: none;
+}
+
+a.link--fancy-reverse, a.link--sans, a.my-uk-logo {
+    box-shadow: none;
+}
+
+/* Additional universal header bits */
+.ukl-ext-clamp .slab__wrapper { max-width: 100% !important; }
+
+/* and footer tweaks */
+
+
+#home-content {
+    min-height: 100vh;
+}
+
+/* fines area note */
+
+#finesAnnounce {
+    background-color: rgb(255,255,255);
+    height: 67.3px;
+    padding: 10px;
+}
+
+#finesAnnounceNote {
+    font-size: 1.2em;
+}

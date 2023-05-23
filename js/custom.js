@@ -1,12 +1,10 @@
 (function(){
   "use strict";
-  'use strict';
       
-  var app = angular.module('viewCustom', ['angularLoad', 'aeonRequest', 'floorMaps', 'logoTweaks','hathiTrustAvailability','libChat','linksToKeep','finesNote']);
+  var app = angular.module('viewCustom', ['angularLoad', 'aeonRequest', 'floorMaps', 'logoTweaks','hathiTrustAvailability','libChat','linksToKeep']);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // Start universal header / footer stuff
-
 
 //// make the footer
 app.component('prmExploreFooterAfter', {
@@ -15,11 +13,10 @@ app.component('prmExploreFooterAfter', {
   template: '<div></div>'
 });
 
-
 app.controller('ukhdrController', [function () {
 
-
 // individual links for secondary header
+// currently undefined since we're using built-in Primo header
 let headerLinks = [
 {name:"hdr.include", content:"0"},
 {name:"hdr.home.label", content:"HOME"},
@@ -49,9 +46,9 @@ document.head.appendChild(addHeaderLink);
 addHeaderLink = document.createElement("meta");
 }
 
-
-
 // end individual links
+
+// adding bits and pieces related to header & footer
 var addStuff = document.createElement("script");
 addStuff.type = "text/javascript"; 
 addStuff.src = "https://use.fontawesome.com/515bdf71f2.js";
@@ -73,16 +70,12 @@ addHeaderFooterStyle.href = "https://lib.uky.edu/webparts/ukhdr/2022/css/global_
 addHeaderFooterStyle.media = "all";
 document.head.appendChild(addHeaderFooterStyle);
 
-
-
-console.log("script for universal added"); 
-
-
-
+// console.log("script for universal added"); 
 
 }]);
 
 // trigger the window load event after more of the page exists
+// since page load event triggers before <body> is created
 app.component('prmMainMenuAfter', {
      bindings: { parentCtrl: '<' },
      controller: function($scope) {
@@ -95,8 +88,6 @@ app.component('prmMainMenuAfter', {
 
           }, 1000);
      }
-
-     
 
 }); 
 
@@ -156,6 +147,8 @@ document.head.appendChild(browzine.script);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // MODULE: aeonRequest  
+// Description: Watches for specific locations and adds a request link to brief result
+//              points to our Aeon (for Special Collections items)
 angular.module('aeonRequest', [])
 .component('aeonRequest', {
   bindings: { parentCtrl: '<' },
@@ -233,8 +226,10 @@ angular.module('aeonRequest', [])
 };
   };
 }]);
+
 /////////////////////////////////////////////////////////////////////////////////////
 // Module: logoTweaks
+// Description: Adjusting the logo a bit to accomodate the unversal header
 angular.module('logoTweaks', [])
 .controller('prmLogoAfterController', [function () {
     var vm = this;
@@ -252,8 +247,10 @@ angular.module('logoTweaks', [])
         bindings: {parentCtrl: '<'},
         template: '<div class="primo-search-logo"></div><div id="scopeNoteBox"></div>' 
 });
+
 /////////////////////////////////////////////////////////////////////////////////////
 // Module: floorMaps
+// Description: Adds a map image to full display when relevant (Pawan's integration)
 angular.module('floorMaps', [])
 .controller('libMapController', [function () {
   this.$onInit = function () { 
@@ -408,235 +405,7 @@ angular.module('floorMaps', [])
   controller: 'libMapController',
   template: '<div ng-show="$ctrl.showMap"><i class="fa fa-map mapToggleMap"></i><a id="mapToggleLink" href="" class="arrow-link md-primoExplore-theme" ng-click="mapToggle=(mapToggle ? false : true)">Show a map of {{$ctrl.libraryName}}</a><prm-icon id="mapToggleIcon" link-arrow="" icon-type="svg" svg-icon-set="primo-ui" icon-definition="chevron-right"><md-icon id="mapToggleIcon" class="md-primoExplore-theme"></md-icon></prm-icon>' + '<div ng-if="mapToggle"><code ng-show="$ctrl.debug" class="ic-debug">MAP PROBLEM</code>' + '<br /><br />' + '<div class="ic-map-div">' + '<img class="ic-map-img" ng-src="{{$ctrl.mapFileLocation}}" ng-style="$ctrl.mapDimensions", title={{$ctrl.mapMessage}}>' + '<canvas class="ic-map-canvas"></canvas>' + '</div>' + '</div></div>'
 });
-
-/////////////////////////////////////////////////////////////////////////////////////
-// Module: zeroResults
-angular.module('zeroResults', [])
-.component('prmNoSearchResultAfter', {
-  bindings: { parentCtrl: '<' },
-  controller: 'zeroResultsController',
-  template: '<md-card class="default-card _md zero-margin md-primoExplore-theme"><md-card-title>TITLE</md-card-title><md-card-content><md-button class="md-raised"><img src="https://saalck-uky.primo.exlibrisgroup.com/discovery/custom/01SAA_UKY-UKY/img/UKAeonfavicon2.png" style="vertical-align:middle;">Search WorldCat</md-button></md-card-content></md-card>'
-})
-.controller('zeroResultsController', [function () {
-  this.$onInit = function () {
-    // Ah check if the boolwatch thing can fit in here
-    console.log("Zero results triggered");
-  }
-}]);
-/////////////////////////////////////////////////////////////////////////////////////
-// Module: extraCovers
-
-/////////////////////////////////////////////////////////////////////////////////////
-// Module: adjustQuickLinks
-angular.module('adjustQuickLinks', [])
-.component('prmQuickLinkAfter',{
-  bindings: {parentCtrl: '<'},
-  controller: ['$location', function($location) {                               
-            let removeAllCDIProxy = true; //Remove proxy allways                 
-            this.$onInit = function () {
-                    console.log("Quicklinks adjust triggered");
-                     let vm = this;
-                     let isOpenAccess = false;
-                     //Check if record is OA
-                     if (vm.parentCtrl.item.pnx.display.oa) {
-                               vm.parentCtrl.item.pnx.display.oa.forEach(function(xopenaccess) {
-                                         if (xopenaccess.localeCompare('free_for_read')==0) {isOpenAccess = true;}
-                               });
-                     }
-                     if (vm.parentCtrl.recordLinks) {
-                               vm.parentCtrl.recordLinks.forEach(function(xlink) {
-                                        let oldLink=xlink.url;
-                                        //Primo May 2022 OA comes with link
-                                        if (xlink.oaLink && xlink.oaLink.localeCompare('free_for_read')==0) {isOpenAccess = true;}
-                                        //Decide if Exproxy is in the link
-                                        if (oldLink.indexOf('?url=http')>-1 || oldLink.indexOf('?qurl=http')>-1) {                                                       
-                                                  if (isOpenAccess===true || removeAllCDIProxy===true) {
-                                                            xlink.url=oldLink.replace(/^(.+\?url=http)|^(.+\?qurl=http)/, "hxxp");
-                                                  }
-                                        }                                               
-                               });
-                     }                            
-           };
-  }],
-  template: ''
-});   
-
-/////////////////////////////////////////////////////////////////////////////////////
-// Module: advancedScopeNote
-angular.module('advancedScopeNote', [])
-  .component('prmAdvancedSearchAfter', {
-  bindings: { parentCtrl: '<' },
-  controller: 'scopeNoteController',
-  template: '<div id="advScopeNote"><strong>Here\'s more info about the current scope: {{$ctrl.note}}</strong></div>'
-  })
-  .controller('scopeNoteController', ['$scope', function ($scope) {
-  var stuff = this;
-  console.log($scope.$ctrl.parentCtrl.scope);
-  $scope.$watch('$ctrl.parentCtrl.scope', function (newValue, oldValue) {
-    console.log(newValue);
-    stuff.note = newValue;
-  }, true);
-}]);
-
-/////////////////////////////////////////////////////////////////////////////////////
-// Module: simpleScopeNote
-angular.module('simpleScopeNote', [])
-  .component('prmTabsAndScopesSelectorAfter', {
-  bindings: { parentCtrl: '<' },
-  controller: 'selectorController',
-  template: ''
-})
-  .controller('selectorController', ['$scope', function ($scope) {
-  var stuffSel = this;
-  console.log("Select:");
-  console.log($scope.$ctrl.parentCtrl.selectedTab);
-  $scope.$watch('$ctrl.parentCtrl.selectedTab', function (newValue, oldValue) {
-    //get the primoLogoBox and change the innerhtml
-    var scopeMsg = document.getElementById("scopeNoteBox");
-    scopeMsg.innerHTML = "Here's more info about the current scope: " + newValue;
-    console.log("Here's more info about: " + newValue);
-    stuffSel.note = newValue;
-  }, true);
-}]);
-/////////////////////////////////////////////////////////////////////////////////////
-// Module: requestNote
-angular.module('requestNote', [])
-  .component('prmRequestAfter', {
-  bindings: { parentCtrl: '<' },
-  controller: 'requestNoteController',
-  template: '<div style="color: black;"><strong>This item is at: {{$ctrl.note2}} <br> You want to get it from: {{$ctrl.note}}</strong></div>'
-})
-  .controller('requestNoteController', ['$scope', function ($scope) {
-  var pickupStuff = this;
-  console.log("REQUESTS:");
-  console.log(pickupStuff);
-
-  var holdings = $scope.$parent.$parent.$parent.$ctrl.item.delivery.holding;
-  var hCount = holdings.length;
-  var locString = "";
-  for (var i = 0; i < hCount; i++) {
-    console.log(holdings[i].libraryCode);
-    locString = locString + holdings[i].libraryCode + " -- ";
-  }
-  $scope.$watch('$ctrl.parentCtrl.serviceButtonService.requestService._formData', function (newValue, oldValue) {
-    console.log("PICKUP CHANGED");
-    console.log("Home loc:");
-    console.log($scope.$parent.$parent.$parent.$ctrl.item.delivery.holding);
-    pickupStuff.note = newValue.pickupLocation;
-    switch (pickupStuff.note) {
-      case '13174170002636$$LIBRARY':
-        pickupStuff.note = "Fine Arts Library";
-        break;
-      case '13173830002636$$LIBRARY':
-        pickupStuff.note = "Medical Center Library";
-        break;
-      case '13174850002636$$LIBRARY':
-        pickupStuff.note = "Design Library";
-        break;
-      case '13172520002636$$LIBRARY':
-        pickupStuff.note = "Young Library";
-        break;
-      case '13170580002636$$LIBRARY':
-        pickupStuff.note = "Law Library";
-        break;
-      case '13172180002636$$LIBRARY':
-        pickupStuff.note = "Education";
-        break;
-      case '13173200002636$$LIBRARY':
-        pickupStuff.note = "Science & Education Library";
-        break;
-      default:
-        pickupStuff.note = "No Location Detected";
-    }
-  }, true);
-  pickupStuff.note2 = locString;
-  // NOTES: MAybe just trigger when the best location is storage.
-}]);
-
-/////////////////////////////////////////////////////////////////////////////////////
-// Module: myILL
-app.constant('illiadOptions', {
-  "groups": [0, 1, 2, 3],
-  "remoteScript": "https://naas.createuky.net/illiad/illiad.php",
-  "boxTitle": "InterLibrary Loans",
-  "illiadURL": "https://lib.uky.edu/ILLiad/Logon.html",
-  "apiURL": "https://lib.uky.edu/ILLiad/WebPlatform/Transaction/UserRequests/"
-
-});
-
-angular.module('myILL', []).component('prmLoansOverviewAfter', {
-  bindings: { parentCtrl: '<' },
-  controller: function controller($scope, $element, $q, $http, illService, illiadOptions) {
-    var whitelistGroups = illiadOptions.groups;
-    $scope.illBox = false;
-    this.$onInit = function () {
-      console.log("ILL view triggered");
-      /* from: https://github.com/mehmetc/primo-explore-dom/blob/master/js/primo/explore/helper.js */
-      var rootScope = $scope.$root;
-      var uSMS = rootScope.$$childHead.$ctrl.userSessionManagerService;
-      var jwtData = uSMS.jwtUtilService.getDecodedToken();
-      console.log(jwtData);
-      //var userGroup=parseInt(jwtData.userGroup);
-      var userGroup = 0;
-      var user = jwtData.userName;
-      var check = whitelistGroups.indexOf(userGroup);
-      if (check >= 0) {
-        $scope.illBox = true;
-        $scope.showGlobe = true;
-        $scope.boxTitle = illiadOptions.boxTitle;
-        $scope.illiadURL = illiadOptions.illiadURL;
-        console.log($scope.boxTitle);
-        var url = illiadOptions.remoteScript;
-        var response = illService.getILLiadData(url, user).then(function (response) {
-          console.log(response);
-          $scope.articles = response.data.Articles;
-          $scope.requests = response.data.Requests;
-          if ($scope.requests || $scope.articles) {
-            $scope.showGlobe = false;
-          }
-        });
-      }
-    };
-  },
-  template: '<div class=tiles-grid-tile ng-show={{illBox}}>\n              <div class="layout-column tile-content"layout=column>\n                <div class="layout-column tile-header"layout=column>\n                  <div class="layout-align-space-between-stretch layout-row"layout=row layout-align=space-between>\n                    <h2 class="header-link light-text"role=button tabindex=0>\n                      <span>{{boxTitle}}</span>\n                    </h2>\n                  </div>\n                </div>\n                <md-list class="layout-column md-primoExplore-theme"layout=column role=list>\n                </md-list>\n                <div class="layout-column layout-align-center-center layout-margin layout-padding message-with-icon"layout=column layout-align="center center"layout-margin=""layout-padding="">\n                    <div>\n                    <p style=\'font-size: 18px;font-weight: 400;\'>Pending Requests</p>\n                    <illrequest ng-if="requests" ng-repeat="y in requests" item="y"></illrequest>\n                    <div ng-if="!requests">You have no requests.</div>\n                      <div style="text-align:center;">----</div>\n                    <p style=\'font-size: 18px;font-weight: 400;\'\'>My Articles</p>\n                    <illarticle ng-if="articles" ng-repeat="x in articles" item="x"></illarticle>\n                    <div ng-if="!articles">You have no articles.</div>\n                    <div style="text-align:center;">----</div>\n                    <span>\n                      <a href="{{illiadURL}}" target="_blank">Log into your ILL account</a>\n                       for more information and to place requests.\n                      </span>\n                    </div>\n                  </div>\n                </div>\n              </div>'
-}).component('illarticle', {
-  bindings: { item: '<' },
-  controller: function controller($scope) {
-
-    console.log(this.item);
-    //console.log(this.item.index);
-
-    $scope.url = this.item.url;
-    $scope.title = this.item.title;
-    $scope.item = this.item;
-    $scope.jtitle = this.item.jtitle;
-    $scope.author = this.item.author;
-    $scope.count = this.item.count;
-    $scope.expires = this.item.expires;
-  },
-  template: '<div class=\'md-list-item-inner\' style=\'padding-bottom:10px;\'>\n              <div class=\'md-list-item-text\'>\n                <p style=\'font-size: 16px;font-weight: 400;letter-spacing: .01em;margin: 0;line-height: 1.2em;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;\'><a href=\'{{url}}\' target=\'_blank\'>{{title}}</a></p>\n                <p style=\'font-size: 14px;letter-spacing: .01em;margin: 3px 0 1px;font-weight: 400;line-height: 1.2em;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;\'>{{author}}</p>\n                <p style=\'font-size: 14px;letter-spacing: .01em;margin: 3px 0 1px;font-weight: 400;line-height: 1.2em;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;\'>Expires {{expires}}.</p>\n              </div>\n            </div>'
-
-}).component('illrequest', {
-  bindings: { item: '<' },
-  controller: function controller($scope) {
-    $scope.title = this.item.title;
-    $scope.author = this.item.author;
-    $scope.count = this.item.count;
-  },
-  //template:"<p>{{count}}) {{title}}/ {{author}}. </p>"
-  template: '<div class=\'md-list-item-inner\' style=\'padding-bottom:10px;\'>\n              <div class=\'md-list-item-text\'>\n                <p style=\'font-size: 16px;font-weight: 400;letter-spacing: .01em;margin: 0;line-height: 1.2em;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;\'>{{title}}</p>\n                <p style=\'font-size: 14px;letter-spacing: .01em;margin: 3px 0 1px;font-weight: 400;line-height: 1.2em;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;\'>{{author}}</p>\n              </div>\n            </div>'
-}).factory('illService', ['$http', function ($http) {
-  return {
-    getILLiadData: function getILLiadData(url, user) {
-      return $http({
-        method: 'GET',
-        url: url,
-        params: { 'user': user },
-        cache: true
-      });
-    }
-  };
-}]);
+  
 /////////////////////////////////////////////////////////////////////////////////////
 // HathiTrust Public Domain Links
 ////////////////////////////////////////////////////////////////////////////////////
@@ -890,6 +659,8 @@ app.controller('prmSearchResultAvailabilityLineAfterController', function($scope
     controller: 'prmSearchResultAvailabilityLineAfterController',
     template: '\n    <aeon-request parent-ctrl="$ctrl.parentCtrl"></aeon-request><hathi-trust-availability></hathi-trust-availability>'
   });
+
+
   // Start Google Analytics 
     window.googleAnalytics = {}
     googleAnalytics.script = document.createElement("script");
@@ -942,6 +713,7 @@ app.controller('prmSearchResultAvailabilityLineAfterController', function($scope
 
 /////////////////////////////////////////////////////////////////////////////////////
 // Module: libChat
+// Description: Add libchat widget
 
 // Start chat
 angular.module('libChat', [])
@@ -963,6 +735,7 @@ angular.module('libChat', [])
 /////////////////////////////////////////////////////////////////////////////////////   
 // module: linksToKeep
 // From Orbis Cascade Primo Toolkit: https://www.orbiscascade.org/programs/systems/pcsg/primo-ve-toolkit/hide-856-links/
+// Description: A quick fix to support larger work phasing out 856 exproxy links
 angular.module('linksToKeep', []).component('prmServiceLinksAfter', {
   bindings: {
     parentCtrl: '<'
@@ -994,22 +767,4 @@ angular.module('linksToKeep', []).component('prmServiceLinksAfter', {
   "ProQuest dissertation DIRECT LINK"
 ]);
 
-////////////////////
-// Start fines note
-angular.module('finesNote', [])
-.component('prmFinesAfter', {
-  bindings: { parentCtrl: '<' },
-  controller: 'prmFinesAfterController',
-  template: `<div id="finesAnnounce" class="in-element-dialog-context layout-row flex" layout="row">
-              <div id="finesAnnounceNote"><p>Through March 31 we are accepting food and personal care items as "payment" for up to $20 of qualifying fines.  <a href="https://libraries.uky.edu/news/uk-libraries-patrons-invited-pay-library-fines-support-big-blue-pantry">Please visit our site for more information.</a> </p></div>
-             </div>`
-})
-.controller('prmFinesAfterController', ['$scope', function($scope) {
-  this.$onInit = function () {
-    let ctrl = this;
-    console.log("fine box triggered");
-    console.log(ctrl.parentCtrl);
-    console.log($scope.$parent.$ctrl);
-
-}}]);
   })();

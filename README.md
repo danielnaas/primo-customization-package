@@ -1,0 +1,30 @@
+# primo-customization-package
+Customization package for the main Primo view at the University of Kentucky. 01SAA_UKY:UKY
+
+## Summary of contents
+
+### Universal header and footer
+Code for header and footer for UK Libraries websites
+
+### LibKey links in brief record view
+[Documentation from Third Iron](https://thirdiron.atlassian.net/wiki/spaces/BrowZineAPIDocs/pages/79200260)
+
+### Aeon request links in brief view
+We want requests for Special Collections Research Center materials to go to our Aeon instead of our Alma so we add a separate link in prmSearchResultAvailabilityLineAfter
+
+### Logo tweaks
+A little top-left logo fiddling to accomodate the universal header
+
+### Floor maps
+A simple map integration that adds an image of the relevant library floor to the full display of a record
+
+### HathiTrust public domain links
+Links to HathiTrust items in brief results.  From [UMN Libraries](https://github.com/UMNLibraries/primo-explore-hathitrust-availability)
+
+### Google Analytics, Siteimprove
+Code related to commuicating with these services
+
+### Footer spacing fix
+Code related to getting the universal footer to play nicer with the bottom of the search results.  Mostly from [Bond University](https://librarysearch.bond.edu.au/discovery/search?vid=61BOND_INST:BOND
+
+### (pick up with LibChat later)

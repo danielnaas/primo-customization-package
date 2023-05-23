@@ -27,4 +27,8 @@ Code related to commuicating with these services
 ### Footer spacing fix
 Code related to getting the universal footer to play nicer with the bottom of the search results.  Mostly from [Bond University](https://librarysearch.bond.edu.au/discovery/search?vid=61BOND_INST:BOND
 
-### (pick up with LibChat later)
+### LibChat widget
+Button at bottom of window that makes SpringShare chat widget slide up.  [From Ex Libris blog I think](https://developers.exlibrisgroup.com/blog/embedding-springshare-libchat-widget-into-the-primo-nu/)
+
+### Hide selected 856 links
+Code to hide a bunch of EZProxy links as a part of a move to OpenAthens.  From [Orbis Cascade Alliance Toolkit](https://www.orbiscascade.org/programs/systems/pcsg/primo-ve-toolkit/hide-856-links/)

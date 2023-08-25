@@ -6,6 +6,14 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // Start universal header / footer stuff
 
+// add the css
+var addHeaderFooterStyle = document.createElement("link");
+addHeaderFooterStyle.rel = "stylesheet"; 
+addHeaderFooterStyle.href = "https://ukylib-exhibit-test.org/ukhdr/2022/css/global_header_footer.css";
+addHeaderFooterStyle.media = "all";
+document.head.appendChild(addHeaderFooterStyle);
+
+
 //// make the footer
 app.component('prmExploreFooterAfter', {
   bindings: { parentCtrl: '<' },
@@ -91,11 +99,7 @@ addUKHeader.type = "text/javascript";
 addUKHeader.src = "https://lib.uky.edu/webparts/ukhdr/2022/js/universalheader.js";
 document.head.appendChild(addUKHeader);
 */
-var addHeaderFooterStyle = document.createElement("link");
-addHeaderFooterStyle.rel = "stylesheet"; 
-addHeaderFooterStyle.href = "https://ukylib-exhibit-test.org/ukhdr/2022/css/global_header_footer.css";
-addHeaderFooterStyle.media = "all";
-document.head.appendChild(addHeaderFooterStyle);
+
 
 // console.log("script for universal added"); 
 

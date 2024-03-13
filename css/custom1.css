@@ -1,5 +1,6 @@
 @import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css);
-@charset "utf-8";
+@import url(https://lib.uky.edu/webparts/ukhdr/2024/css/global_header_footer.css);
+
 /* CSS Document for UKY Production  */
 
 /* Move facets to Left side 
@@ -49,8 +50,8 @@ prm-logo .logo-image, prm-logo img {
 
 */
 
-  * Header
-  */
+
+/* Header */
  
  /* background-color */
  .prm-primary-bg, prm-browse-search-bar, prm-journals-search-bar, prm-search-bar, prm-spinner.overlay-cover.light-on-dark:after, prm-tags-search-bar {
@@ -234,6 +235,7 @@ prm-main-menu[menu-type="menu"] .md-button {
 }
 
 /* End Aeon Stuff */
+
 #newsbox {
     width: 600;
     display: block;
@@ -345,4 +347,9 @@ a.link--fancy-reverse, a.link--sans, a.my-uk-logo {
 
 #finesAnnounceNote {
     font-size: 1.2em;
+}
+
+/* Remove book/journal option in Purchase Request form */
+prm-request #form_field_citationType {
+    display: none;
 }

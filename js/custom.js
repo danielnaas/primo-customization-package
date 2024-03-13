@@ -1,18 +1,30 @@
 (function(){
   "use strict";
       
-  var app = angular.module('viewCustom', ['angularLoad', 'aeonRequest', 'floorMaps', 'logoTweaks','hathiTrustAvailability','libChat','linksToKeep']);
+  var app = angular.module('viewCustom', ['angularLoad', 'aeonRequest', 'floorMaps', 'logoTweaks','hathiTrustAvailability','libChat','linksToKeep', 'requestTweaks']);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // Start universal header / footer stuff
 
 // add the css
+/*
 var addHeaderFooterStyle = document.createElement("link");
 addHeaderFooterStyle.rel = "stylesheet"; 
-addHeaderFooterStyle.href = "https://ukylib-exhibit-test.org/ukhdr/2022/css/global_header_footer.css";
+addHeaderFooterStyle.href = "https://lib.uky.edu/webparts/ukhdr/2022/css/global_header_footer.css";
 addHeaderFooterStyle.media = "all";
 document.head.appendChild(addHeaderFooterStyle);
+*/
 
+// adding bits and pieces related to header & footer
+var addStuff = document.createElement("script");
+addStuff.type = "text/javascript"; 
+addStuff.src = "https://use.fontawesome.com/515bdf71f2.js";
+document.head.appendChild(addStuff);
+
+var addUKFooter = document.createElement("script");
+addUKFooter.type = "text/javascript"; 
+addUKFooter.src = "https://lib.uky.edu/webparts/ukhdr/2024/js/combofootershared.js";
+document.head.appendChild(addUKFooter);
 
 //// make the footer
 app.component('prmExploreFooterAfter', {
@@ -25,23 +37,7 @@ app.controller('ukhdrController', [function () {
 
 // individual links for secondary header
 // currently undefined since we're using built-in Primo header
-let headerLinks = [
-{name:"hdr.include", content:"0"},
-{name:"hdr.home.label", content:"HOME"},
-{name:"hdr.home.link", content:"https://"},
-{name:"hdr.link1.label", content:"Link #1"},
-{name:"hdr.link1.url", content:"https://"},
-{name:"hdr.link2.label", content:"Link #2"},
-{name:"hdr.link2.url", content:"https://"},
-{name:"hdr.link3.label", content:"Link #3"},
-{name:"hdr.link3.url", content:"https://"},
-{name:"hdr.link4.label", content:"Link #4"},
-{name:"hdr.link4.url", content:"https://"},
-{name:"hdr.link5.label", content:"Link #5"},
-{name:"hdr.link5.url", content:"https://"},
-{name:"hdr.link6.label", content:"Link #6"},
-{name:"hdr.link6.url", content:"https://"},
-]
+let headerLinks = [{ name: "hdr.simple", content: "0" }, { name: "hdr.include", content: "0" }, { name: "hdr.home.label", content: "HOME" }, { name: "hdr.home.link", content: "https://" }, { name: "hdr.link1.label", content: "Link #1" }, { name: "hdr.link1.url", content: "https://" }, { name: "hdr.link2.label", content: "Link #2" }, { name: "hdr.link2.url", content: "https://" }, { name: "hdr.link3.label", content: "Link #3" }, { name: "hdr.link3.url", content: "https://" }, { name: "hdr.link4.label", content: "Link #4" }, { name: "hdr.link4.url", content: "https://" }, { name: "hdr.link5.label", content: "Link #5" }, { name: "hdr.link5.url", content: "https://" }, { name: "hdr.link6.label", content: "Link #6" }, { name: "hdr.link6.url", content: "https://" }, { name: "hdr.srch.include", content: "0" }, { name: "hdr.width", content: "" }, { name: "hdr.alert.include", content: "0" }, { name: "hdr.alert.title", content: "" }, { name: "hdr.alert.msg", content: "" }, { name: "hdr.alert.url.label", content: "" }, { name: "hdr.alert.url", content: "0" }];
 
 let addHeaderLink = document.createElement("meta");
 for (let key in headerLinks) {
@@ -56,10 +52,13 @@ addHeaderLink = document.createElement("meta");
 
 // end individual links
 
+
+
 // adding the header right in here since we were having trouble
 // with the trigger that other sites use
-var ukDiv = document.createElement("div");
-ukDiv.id = "ukheader";
+//var ukDiv = document.createElement("div");
+//ukDiv.id = "ukheader";
+/*
 ukDiv.innerHTML = `
 <div class="ukl-ext-clamp">
   <div class="slab universal-header">
@@ -81,28 +80,31 @@ ukDiv.innerHTML = `
   </div>
 </div>
 `;
-document.body.insertBefore(ukDiv, document.body.firstChild);
+*/
+//document.body.insertBefore(ukDiv, document.body.firstChild);
 
-// adding bits and pieces related to header & footer
-var addStuff = document.createElement("script");
-addStuff.type = "text/javascript"; 
-addStuff.src = "https://use.fontawesome.com/515bdf71f2.js";
-document.head.appendChild(addStuff);
-
-var addUKFooter = document.createElement("script");
-addUKFooter.type = "text/javascript"; 
-addUKFooter.src = "https://lib.uky.edu/webparts/ukhdr/2022/js/combofootershared.js";
-document.head.appendChild(addUKFooter);
-/*
 var addUKHeader = document.createElement("script");
 addUKHeader.type = "text/javascript"; 
-addUKHeader.src = "https://lib.uky.edu/webparts/ukhdr/2022/js/universalheader.js";
-document.head.appendChild(addUKHeader);
+addUKHeader.src = "https://lib.uky.edu/webparts/ukhdr/2024/js/infokat_universalheader.js";
+addUKHeader.async = 'true';
+var scriptOrder = document.getElementsByTagName('script')[0]; 
+scriptOrder.parentNode.insertBefore(addUKHeader, scriptOrder);
+//document.head.appendChild(addUKHeader);
+console.log("script for universal added");
+
+/*
+let onloadMonitor = false;
+
+window.addEventListener("load", function () {
+addUKHeader.onload = function () {
+  if (document.getElementById("ukheader") === null) {
+    const event = new Event('load');
+    window.dispatchEvent(event);
+    console.log("did this work?");
+  }
+
+}
 */
-
-
-// console.log("script for universal added"); 
-
 }]);
 
 // trigger the window load event after more of the page exists
@@ -798,5 +800,42 @@ angular.module('linksToKeep', []).component('prmServiceLinksAfter', {
   "ProQuest Dissertation Articles DIRECT LINK",
   "ProQuest dissertation DIRECT LINK"
 ]);
+
+///////////////////////////////
+// Adjusting Book Express request form to only show
+// the generic checkbox when the pickup location
+// is set to Young (for the smart lockers)
+angular.module('requestTweaks', []).component('prmRequestAfter', {
+  bindings: {
+    parentCtrl: '<'
+    },
+    controller: function controller($document, $scope) {
+      this.$onInit = function () {
+        this.$doCheck = () => {
+          let pickupLocation = '';
+          let genericCheckbox = '';
+
+          // adjusting the generic checkbox so it only shows up for pickup location Young
+          if (document.querySelector("#mandatory_pickupLocation span[role='button']")) {
+            pickupLocation = document.querySelector("#mandatory_pickupLocation span[role='button']");
+            genericCheckbox = document.querySelector('#form_field_checkbox_genericCheckBox')
+
+            if (pickupLocation.textContent == "Young Library") {
+              console.log('presented checkbox');
+              console.log(pickupLocation.textContent);
+              //console.log($scope);
+              genericCheckbox.style.display = "";
+              } else {
+                genericCheckbox.style.display = "none";
+              };
+          };
+
+          // 
+        };
+      };
+}});
+///////////////////////////////
+
+
 
   })();

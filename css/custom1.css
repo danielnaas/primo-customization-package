@@ -55,12 +55,12 @@ prm-logo .logo-image, prm-logo img {
  
  /* background-color */
  .prm-primary-bg, prm-browse-search-bar, prm-journals-search-bar, prm-search-bar, prm-spinner.overlay-cover.light-on-dark:after, prm-tags-search-bar {
-    color: #fff;
+    /* color: #fff; */
     background-color: #0033a0;
  }
  
  .prm-primary-bg.prm-hue1, prm-spinner.prm-hue1.overlay-cover.light-on-dark:after, prm-topbar .top-nav-bar, prm-search-bar.prm-hue1 {
-      background-color: #0033a0;
+    background-color: #0033a0;
  }
  
  /*
@@ -352,4 +352,10 @@ a.link--fancy-reverse, a.link--sans, a.my-uk-logo {
 /* Remove book/journal option in Purchase Request form */
 prm-request #form_field_citationType {
     display: none;
+}
+
+/* adjustment for default hyperlink color since it has contrast issues
+   in Collection Discovery */
+a.collection-desc-link {
+    color: #FFFF00;
 }

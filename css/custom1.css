@@ -350,7 +350,7 @@ a.link--fancy-reverse, a.link--sans, a.my-uk-logo {
 }
 
 /* Remove book/journal option in Purchase Request form */
-prm-request #form_field_citationType {
+prm-request #form_field_citationType, prm-blank-purchase-request #form_field_electronicChooseType, prm-blank-purchase-request #form_field_physicalChooseType {
     display: none;
 }
 

@@ -9,7 +9,7 @@ var scriptHeader = document.createElement("script");
 scriptHeader.id = "ukl-header-script";
 scriptHeader.type = "module";
 scriptHeader.src = "https://lib.uky.edu/webparts/ukhdr/prod/js/universalheader.js";
-scriptHeader.setAttribute('data-base_path', 'kdnp');
+scriptHeader.setAttribute('data-base_path', 'infokat');
 scriptHeader.onerror = '(() => { // Remove this script\n\t\t\t\told_script = document.querySelector(\'#ukl-header-script\');\n\t\t\t\told_script.remove();\n\n\t\t\t\t// Use the fallback css\n\t\t\t\tconst styles = document.querySelector(\'#ukl-header-styles\');\n\t\t\t\tstyles.href=\'https://cdn.jsdelivr.net/gh/uklibraries/UKL_HeaderFooter@main/css/global_header_footer.css\'\n\t\t\t\t\n\t\t\t\t// Create a new script and use fallback js\n\t\t\t\tconst script = document.createElement(\'script\');\n\t\t\t\tscript.id = \'ukl-header-script\';\n\t\t\t\tscript.type = \'module\';\n\t\t\t\tscript.src = \'https://cdn.jsdelivr.net/gh/uklibraries/UKL_HeaderFooter@main/js/universalheader.js\';\n\t\t\t\tscript.dataset.base_path = \'kdnp\';\n\t\t\t\tdocument.head.appendChild(script);\n\n\t\t\t\t// Remove footer script\n\t\t\t\told_footer=document.querySelector(\'#ukl-footer-script\')\n\t\t\t\told_footer.remove();\n\t\t\t\t\n\t\t\t\t// Create a new footer script and use fallback js\n\t\t\t\tconst footer_script = document.createElement(\'script\');\n\t\t\t\tfooter_script.src=\'https://cdn.jsdelivr.net/gh/uklibraries/UKL_HeaderFooter@main/js/combofootershared.js\';\n\t\t\t\tdocument.body.appendChild(footer_script);\n\t\t\t})();';
 
 document.head.appendChild(scriptHeader);

@@ -5,56 +5,20 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // Start universal header / footer stuff
+var scriptHeader = document.createElement("script");
+scriptHeader.id = "ukl-header-script";
+scriptHeader.type = "module";
+scriptHeader.src = "https://lib.uky.edu/webparts/ukhdr/prod/js/universalheader.js";
+scriptHeader.setAttribute('data-base_path', 'kdnp');
+scriptHeader.onerror = '(() => { // Remove this script\n\t\t\t\told_script = document.querySelector(\'#ukl-header-script\');\n\t\t\t\told_script.remove();\n\n\t\t\t\t// Use the fallback css\n\t\t\t\tconst styles = document.querySelector(\'#ukl-header-styles\');\n\t\t\t\tstyles.href=\'https://cdn.jsdelivr.net/gh/uklibraries/UKL_HeaderFooter@main/css/global_header_footer.css\'\n\t\t\t\t\n\t\t\t\t// Create a new script and use fallback js\n\t\t\t\tconst script = document.createElement(\'script\');\n\t\t\t\tscript.id = \'ukl-header-script\';\n\t\t\t\tscript.type = \'module\';\n\t\t\t\tscript.src = \'https://cdn.jsdelivr.net/gh/uklibraries/UKL_HeaderFooter@main/js/universalheader.js\';\n\t\t\t\tscript.dataset.base_path = \'kdnp\';\n\t\t\t\tdocument.head.appendChild(script);\n\n\t\t\t\t// Remove footer script\n\t\t\t\told_footer=document.querySelector(\'#ukl-footer-script\')\n\t\t\t\told_footer.remove();\n\t\t\t\t\n\t\t\t\t// Create a new footer script and use fallback js\n\t\t\t\tconst footer_script = document.createElement(\'script\');\n\t\t\t\tfooter_script.src=\'https://cdn.jsdelivr.net/gh/uklibraries/UKL_HeaderFooter@main/js/combofootershared.js\';\n\t\t\t\tdocument.body.appendChild(footer_script);\n\t\t\t})();';
 
-// adding bits and pieces related to header & footer
-var addStuff = document.createElement("script");
-addStuff.type = "text/javascript"; 
-addStuff.src = "https://use.fontawesome.com/515bdf71f2.js";
-document.head.appendChild(addStuff);
+document.head.appendChild(scriptHeader);
 
-var addUKFooter = document.createElement("script");
-addUKFooter.type = "text/javascript"; 
-addUKFooter.src = "https://lib.uky.edu/webparts/ukhdr/2024/js/combofootershared.js";
-document.head.appendChild(addUKFooter);
-
-//// make the footer
-app.component('prmExploreFooterAfter', {
-  bindings: { parentCtrl: '<' },
-  controller: 'ukhdrController',
-  template: '<div></div>'
-});
-
-app.controller('ukhdrController', [function () {
-
-// individual links for secondary header
-// currently undefined since we're using built-in Primo header
-let headerLinks = [{ name: "hdr.simple", content: "0" }, { name: "hdr.include", content: "0" }, { name: "hdr.home.label", content: "HOME" }, { name: "hdr.home.link", content: "https://" }, { name: "hdr.link1.label", content: "Link #1" }, { name: "hdr.link1.url", content: "https://" }, { name: "hdr.link2.label", content: "Link #2" }, { name: "hdr.link2.url", content: "https://" }, { name: "hdr.link3.label", content: "Link #3" }, { name: "hdr.link3.url", content: "https://" }, { name: "hdr.link4.label", content: "Link #4" }, { name: "hdr.link4.url", content: "https://" }, { name: "hdr.link5.label", content: "Link #5" }, { name: "hdr.link5.url", content: "https://" }, { name: "hdr.link6.label", content: "Link #6" }, { name: "hdr.link6.url", content: "https://" }, { name: "hdr.srch.include", content: "0" }, { name: "hdr.width", content: "" }, { name: "hdr.alert.include", content: "0" }, { name: "hdr.alert.title", content: "" }, { name: "hdr.alert.msg", content: "" }, { name: "hdr.alert.url.label", content: "" }, { name: "hdr.alert.url", content: "0" }];
-
-let addHeaderLink = document.createElement("meta");
-for (let key in headerLinks) {
-let name = headerLinks[key]["name"];
-let content = headerLinks[key]["content"];
-console.log(name, content);
-addHeaderLink.name = name; 
-addHeaderLink.content = content;
-document.head.appendChild(addHeaderLink);
-addHeaderLink = document.createElement("meta");
-}
-
-// end individual links
-
-var addUKHeader = document.createElement("script");
-addUKHeader.type = "text/javascript"; 
-addUKHeader.src = "https://lib.uky.edu/webparts/ukhdr/2024/js/infokat_universalheader.js";
-addUKHeader.async = 'true';
-var scriptOrder = document.getElementsByTagName('script')[0]; 
-scriptOrder.parentNode.insertBefore(addUKHeader, scriptOrder);
-//document.head.appendChild(addUKHeader);
-console.log("script for universal added");
-
-
-}]);
-
+var scriptFooter = document.createElement("script");
+scriptFooter.type = "text/javascript";
+scriptFooter.src = "https://lib.uky.edu/webparts/ukhdr/prod/js/combofootershared.js";
+document.body.appendChild(scriptFooter);
+// End universal header / footer stuff
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////

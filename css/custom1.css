@@ -1,4 +1,6 @@
-@charset "utf-8";
+@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css);
+@import url(https://lib.uky.edu/webparts/ukhdr/prod/css/global_header_footer.css);
+
 /* CSS Document for UKY Production  */
 
 /* Move facets to Left side 
@@ -24,8 +26,8 @@ prm-search > .layout-row {
 }
 */
 prm-topbar .isDeposit, prm-topbar .isServicePage, prm-topbar .isSummonOverAlma {
-    display: inline;
-}   
+	display: inline;
+}	
 /*Make Clickable Logo CSS */
 
 /* Call the clickable logo */
@@ -48,17 +50,17 @@ prm-logo .logo-image, prm-logo img {
 
 */
 
-  * Header
-  */
+
+/* Header */
  
  /* background-color */
  .prm-primary-bg, prm-browse-search-bar, prm-journals-search-bar, prm-search-bar, prm-spinner.overlay-cover.light-on-dark:after, prm-tags-search-bar {
-    color: #fff;
-    background-color: #143887;
+    /* color: #fff; */
+    background-color: #0033a0;
  }
  
  .prm-primary-bg.prm-hue1, prm-spinner.prm-hue1.overlay-cover.light-on-dark:after, prm-topbar .top-nav-bar, prm-search-bar.prm-hue1 {
-      background-color: #202C5F;
+    background-color: #0033a0;
  }
  
  /*
@@ -86,7 +88,8 @@ prm-logo .logo-image, prm-logo img {
  md-fab-toolbar .md-fab-action-item .md-button, prm-user-area 
  md-fab-toolbar ._md-fab-action-item .md-button, prm-user-area 
  md-fab-toolbar .md-fab-action-item md-input-container, prm-user-area 
- md-fab-toolbar._md-fab-action-item md-input-container, .md-button.button-over-dark, prm-user-area .md-button.user-menu-button, prm-topbar .md-button {
+ md-fab
+ -toolbar .md-fab-action-item md-input-container, .md-button.button-over-dark, prm-user-area .md-button.user-menu-button, prm-topbar .md-button {
      color: #FFFFFF;
  }
  
@@ -94,12 +97,12 @@ prm-logo .logo-image, prm-logo img {
  
  /* Search Bar background-color */
  .prm-primary-bg, prm-browse-search-bar, prm-atoz-search-bar, prm-journals-search-bar, prm-search-bar, prm-spinner.overlay-cover.light-on-dark:after, prm-search-bar {
-     background-color: #143887;
+     background-color: #0033a0;
  }
 
  /*   hue3 section of color rules */
 .prm-primary-bg.prm-hue3-important,prm-browse-search-bar.prm-hue3-important,prm-journals-search-bar.prm-hue3-important,prm-search-bar.prm-hue3-important,prm-spinner.prm-hue3-important.overlay-cover.light-on-dark:after,prm-tags-search-bar.prm-hue3-important,prm-user-area md-fab-toolbar.md-is-open md-fab-trigger ._md-fab-toolbar-background,prm-user-area md-fab-toolbar.md-is-open md-fab-trigger .md-fab-toolbar-background {
-    background-color: #202C5F !important
+    background-color: #0033a0 !important
 }
 
 /* Disable Language choice  */
@@ -192,6 +195,18 @@ prm-main-menu[menu-type="menu"] .md-button {
 
 }
 
+#mapToggleLink:hover {
+    padding-right: 5px;
+}
+
+#mapToggleIcon {
+    color: #3d6e94;
+}
+.mapToggleMap {
+    color: #3d6e94;
+    padding-left: 20px;
+    padding-right: 5px;
+}
 /* End maps style */
 
 /* Begin Aeon Stuff */
@@ -220,6 +235,7 @@ prm-main-menu[menu-type="menu"] .md-button {
 }
 
 /* End Aeon Stuff */
+
 #newsbox {
     width: 600;
     display: block;
@@ -282,20 +298,64 @@ span.umnHathiTrustLink:hover md-icon svg {
             padding: 20px;
         }
 
-#advScopeNote {
-    background-color: rgb(243,243,243);
-    border-color: rgb(243, 243, 243);
-    padding:  15px;
-    text-align: center;
+/* Universal Header and Footer parts */
+
+.ukhdr-titlebox {
+    padding: 10px 0px 10px 20px;
 }
 
-#scopeNoteBox {
-    text-align: center;
-    color: white;
+.ukhdr-title {
+	color: white;
+	font-family:"usual", sans-serif;
+	font-size:16px;
+}
+@media (min-width: 1200px) {
+    .ukhdr-titlebox {
+        width: 260px;
+    }
+    .ukhdr-title {
+        font-size: 28px;
+    }
+}
+
+/* Tweak for Primo wanting to underline the universal header links */
+a.no-under {    
+    box-shadow: none;
+}
+
+a.link--fancy-reverse, a.link--sans, a.my-uk-logo {
+    box-shadow: none;
+}
+
+/* Additional universal header bits */
+.ukl-ext-clamp .slab__wrapper { max-width: 100% !important; }
+
+/* and footer tweaks */
+
+
+#home-content {
+    min-height: 100vh;
+}
+
+/* fines area note */
+
+#finesAnnounce {
+    background-color: rgb(255,255,255);
+    height: 67.3px;
     padding: 10px;
 }
 
+#finesAnnounceNote {
+    font-size: 1.2em;
+}
+
 /* Remove book/journal option in Purchase Request form */
-prm-request #form_field_citationType {
+prm-request #form_field_citationType, prm-blank-purchase-request #form_field_electronicChooseType, prm-blank-purchase-request #form_field_physicalChooseType {
     display: none;
+}
+
+/* adjustment for default hyperlink color since it has contrast issues
+   in Collection Discovery */
+a.collection-desc-link {
+    color: #FFFF00;
 }

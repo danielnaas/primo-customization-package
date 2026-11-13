@@ -113,8 +113,14 @@ angular.module('aeonRequest', [])
         if (mapCollectionUnavailable.includes(self.parentCtrl.result.delivery.bestlocation.subLocationCode)) {
           self.Mms = self.parentCtrl.result.pnx.control.recordid[0];
           console.log("AeonRequest: Map Collection triggered");
-         self.linkLabel = "⚠️ Due to building renovations, this item is unavailable until further notice.";
+          self.linkLabel = "⚠️ Due to building renovations, this item is unavailable until further notice.";
           self.link = "https://libraries.uky.edu/news/renovations-impact-services-multiple-library-locations-beginning-summer-2026";
+          // catch for other items until we rank locations
+          let holdings = self.parentCtrl.result.delivery.holding;
+          console.log("WARNING MESSAGE: Holdings count: " + holdings.length);
+          if (holdings.length > 1) {
+            self.linkLabel += ' Other copies may be avaialble.  Please click "other locations" above.';
+          }
         } else if (self.parentCtrl.result.delivery.bestlocation.libraryCode == "science") {
           self.Mms = self.parentCtrl.result.pnx.control.recordid[0];
           console.log("AeonRequest: SEL triggered");
@@ -285,6 +291,12 @@ angular.module('aeonRequest', [])
       } else {
         self.linkLabel = "⚠️ Due to building renovations, this item is unavailable until further notice.";
         console.log(this);
+        // catch for other items until we rank locations
+          let holdings = self.parentCtrl.result.delivery.holding;
+          console.log("WARNING MESSAGE: Holdings count: " + holdings.length);
+          if (holdings.length > 1) {
+            self.linkLabel += '  Other copies may be avaialble.  Please click "other locations" above.';
+          }
         self.linkImage = "";
         this.urlGenre = "&rft.genre=map";
 

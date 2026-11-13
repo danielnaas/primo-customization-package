@@ -359,3 +359,11 @@ prm-request #form_field_citationType, prm-blank-purchase-request #form_field_ele
 a.collection-desc-link {
     color: #FFFF00;
 }
+
+/* alert note stuff */
+.alert-note {
+    color: #fffcc4;
+    font-size: 1.1rem;
+    margin: auto;
+    text-align: center;
+}

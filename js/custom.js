@@ -1,22 +1,25 @@
 (function(){
   "use strict";
       
-  var app = angular.module('viewCustom', ['angularLoad', 'aeonRequest', 'floorMaps', 'logoTweaks','hathiTrustAvailability','libChat','linksToKeep', 'requestTweaks']);
+  var app = angular.module('viewCustom', ['angularLoad', 'aeonRequest', 'floorMaps', 'logoTweaks','hathiTrustAvailability','libChat','linksToKeep', 'requestTweaks', ]);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // Start universal header / footer stuff
+
 var scriptHeader = document.createElement("script");
 scriptHeader.id = "ukl-header-script";
 scriptHeader.type = "module";
 scriptHeader.src = "https://lib.uky.edu/webparts/ukhdr/prod/js/universalheader.js";
 scriptHeader.setAttribute('data-base_path', 'infokat');
-scriptHeader.onerror = '(() => { // Remove this script\n\t\t\t\told_script = document.querySelector(\'#ukl-header-script\');\n\t\t\t\told_script.remove();\n\n\t\t\t\t// Use the fallback css\n\t\t\t\tconst styles = document.querySelector(\'#ukl-header-styles\');\n\t\t\t\tstyles.href=\'https://cdn.jsdelivr.net/gh/uklibraries/UKL_HeaderFooter@main/css/global_header_footer.css\'\n\t\t\t\t\n\t\t\t\t// Create a new script and use fallback js\n\t\t\t\tconst script = document.createElement(\'script\');\n\t\t\t\tscript.id = \'ukl-header-script\';\n\t\t\t\tscript.type = \'module\';\n\t\t\t\tscript.src = \'https://cdn.jsdelivr.net/gh/uklibraries/UKL_HeaderFooter@main/js/universalheader.js\';\n\t\t\t\tscript.dataset.base_path = \'kdnp\';\n\t\t\t\tdocument.head.appendChild(script);\n\n\t\t\t\t// Remove footer script\n\t\t\t\told_footer=document.querySelector(\'#ukl-footer-script\')\n\t\t\t\told_footer.remove();\n\t\t\t\t\n\t\t\t\t// Create a new footer script and use fallback js\n\t\t\t\tconst footer_script = document.createElement(\'script\');\n\t\t\t\tfooter_script.src=\'https://cdn.jsdelivr.net/gh/uklibraries/UKL_HeaderFooter@main/js/combofootershared.js\';\n\t\t\t\tdocument.body.appendChild(footer_script);\n\t\t\t})();';
+scriptHeader.setAttribute('onerror', '(() => { // Remove this script\n\t\t\t\told_script = document.querySelector(\'#ukl-header-script\');\n\t\t\t\told_script.remove();\n\n\t\t\t\t// Use the fallback css\n\t\t\t\tconst styles = document.querySelector(\'#ukl-header-styles\');\n\t\t\t\tstyles.href=\'https://cdn.jsdelivr.net/gh/uklibraries/UKL_HeaderFooter@main/css/global_header_footer.css\'\n\t\t\t\t\n\t\t\t\t// Create a new script and use fallback js\n\t\t\t\tconst script = document.createElement(\'script\');\n\t\t\t\tscript.id = \'ukl-header-script\';\n\t\t\t\tscript.type = \'module\';\n\t\t\t\tscript.src = \'https://cdn.jsdelivr.net/gh/uklibraries/UKL_HeaderFooter@main/js/universalheader.js\';\n\t\t\t\tscript.dataset.base_path = \'kdnp\';\n\t\t\t\tdocument.head.appendChild(script);\n\n\t\t\t\t// Remove footer script\n\t\t\t\told_footer=document.querySelector(\'#ukl-footer-script\')\n\t\t\t\told_footer.remove();\n\t\t\t\t\n\t\t\t\t// Create a new footer script and use fallback js\n\t\t\t\tconst footer_script = document.createElement(\'script\');\n\t\t\t\tfooter_script.src=\'https://cdn.jsdelivr.net/gh/uklibraries/UKL_HeaderFooter@main/js/combofootershared.js\';\n\t\t\t\tdocument.body.appendChild(footer_script);\n\t\t\t})();');
 
 document.head.appendChild(scriptHeader);
 
 var scriptFooter = document.createElement("script");
 scriptFooter.type = "text/javascript";
 scriptFooter.src = "https://lib.uky.edu/webparts/ukhdr/prod/js/combofootershared.js";
+scriptFooter.setAttribute('onerror', 'console.log(\'FOOTER: Did not load\')');
+
 document.body.appendChild(scriptFooter);
 // End universal header / footer stuff
 
@@ -53,10 +56,10 @@ window.browzine = {
 
   unpaywallEmailAddressKey: "daniel.naas@uky.edu",
   
-  articlePDFDownloadViaUnpaywallEnabled: false,
+  articlePDFDownloadViaUnpaywallEnabled: true,
   articlePDFDownloadViaUnpaywallText: "Download PDF",
 
-  articleLinkViaUnpaywallEnabled: false,
+  articleLinkViaUnpaywallEnabled: true,
   articleLinkViaUnpaywallText: "Read Article",
 
   articleAcceptedManuscriptPDFViaUnpaywallEnabled: false,
@@ -75,27 +78,148 @@ document.head.appendChild(browzine.script);
 // MODULE: aeonRequest  
 // Description: Watches for specific locations and adds a request link to brief result
 //              points to our Aeon (for Special Collections items)
+//  7/13/26 - Here's the <img> to put back in after renovation: <img class="aeonicon" ng-src="{{$ctrl.linkImage}}">
 angular.module('aeonRequest', [])
 .component('aeonRequest', {
   bindings: { parentCtrl: '<' },
   controller: 'aeonRequestController',
-  template: '<span ng-if="$ctrl.Mms" class="md-primoExplore-theme"><a ng-href="{{$ctrl.link}}"><img class="aeonicon" src="https://saalck-uky.primo.exlibrisgroup.com/discovery/custom/01SAA_UKY-UKY/img/UKAeonfavicon2.png">{{$ctrl.linkLabel}}</a></span><br/>'
+  template: '<span ng-if="$ctrl.Mms" class="md-primoExplore-theme"><a ng-href="{{$ctrl.link}}"><img class="aeonicon" ng-src="{{$ctrl.linkImage}}">{{$ctrl.linkLabel}}</a></span><br/>'
 
 })
 .controller('aeonRequestController', [function () {
   this.$onInit = function () {
-    console.log("Aeon triggered");
+    console.log("AeonRequest: Integration triggered");
  {
   var self = this;
   self.Mms = null;
   // array of map sublocations
-  var mapSubLocations = ['scimap', 'scimapovsz', 'scimapdma', 'scimapfich', 'scimapfilm', 'scimappost', 'scimapref', 'scimapsanb', 'scimaptopo', 'scimapvert'];
+  // Added sciovsz and scimapbkov on 12/18 for King Library Annex renovations
+  var mapSubLocations = ['scimap', 'scimapovsz', 'scimapdma', 'scimapfich', 'scimapfilm', 'scimappost', 'scimapref', 'scimapsanb', 'scimaptopo', 'scimapvert', 'sciovsz', 'scimapbkov'];
+  var mapCollectionUnavailable = ['scimap', 'scimapovsz', 'scimapdma', 'scimapfich', 'scimapfilm', 'scimapref', 'scimapsanb', 'scimaptopo', 'scimapbkov', 'scimapbks', 'storsdfc', 'storsdfm', 'storsdmpr', 'storsudocp', 'storsudovz'];
+  var mapCollectionAvailable = ['scimappost', 'scimapvert', 'sciovsz'];
   if (self.parentCtrl.result.delivery.deliveryCategory[0] == "Alma-P") {
     //console.log("Blending Spesh into Map");
-    console.log(self.parentCtrl.result.delivery);
-    if (mapSubLocations.includes(self.parentCtrl.result.delivery.bestlocation.subLocationCode) || self.parentCtrl.result.delivery.bestlocation.libraryCode == "special") {
+    //console.log(self.parentCtrl.result.delivery);
+    // 7/10/26 - Education collections back to normal, disabling note
+    /*
+    if (self.parentCtrl.result.delivery.bestlocation.libraryCode == "education") {
       self.Mms = self.parentCtrl.result.pnx.control.recordid[0];
-      console.log("Yes to this one: " + self.Mms);
+      console.log("AeonRequest: Education triggered");
+      self.linkLabel = "⚠️ Education Library collections must be used in house until further notice.";
+      self.link = "https://libraries.uky.edu/locations/education-library";
+    };
+    */
+    // adding science library note
+        if (mapCollectionUnavailable.includes(self.parentCtrl.result.delivery.bestlocation.subLocationCode)) {
+          self.Mms = self.parentCtrl.result.pnx.control.recordid[0];
+          console.log("AeonRequest: Map Collection triggered");
+         self.linkLabel = "⚠️ Due to building renovations, this item is unavailable until further notice.";
+          self.link = "https://libraries.uky.edu/news/renovations-impact-services-multiple-library-locations-beginning-summer-2026";
+        } else if (self.parentCtrl.result.delivery.bestlocation.libraryCode == "science") {
+          self.Mms = self.parentCtrl.result.pnx.control.recordid[0];
+          console.log("AeonRequest: SEL triggered");
+          console.log(this);
+          self.linkLabel = "⚠️ Science & Engineering Library collections are unavailable until further notice.  Use this link to request this item from InterLibrary Loan.";
+          //self.link = "https://libraries.uky.edu/locations/king-library-annex";
+
+          // build the OpenURL bits
+          try {
+            this.urlTitle = "&rft.title=" + encodeURIComponent(self.parentCtrl.result.pnx.addata.btitle[0]);
+              } catch (e) {
+            this.urlTitle = "&rft.title=undefined";
+          };
+
+          try {
+            this.urlCreator = "&rft.au=" + encodeURIComponent(self.parentCtrl.result.pnx.sort.author[0]);
+          } catch (e) {
+            this.urlCreator = "&rft.au=undefined"
+          };
+
+          try {
+            this.urlDate = "&rft.date=" + encodeURIComponent(self.parentCtrl.result.pnx.display.creationdate);
+          } catch (e) {
+            this.urlDate = "&rft.date==undefined";
+          }
+
+          try {
+            this.urlIsbn = "&rft.isbn=" + encodeURIComponent(self.parentCtrl.result.pnx.addata.isbn[0]);
+          } catch (e) {
+            this.urlIsbn = "&rft.isbn=undefined";
+          }
+          /*
+          try {
+            this.urlSource = "&ItemInfo2=" + encodeURIComponent("https://saalck-uky.primo.exlibrisgroup.com/permalink/01SAA_UKY/15remem/" + self.parentCtrl.result.pnx.control.recordid[0]);
+          } catch (e) {
+            this.urlSource = "&ItemInfo2=Primo";
+          }
+          */
+          let urlCombined = this.urlTitle + this.urlCreator + this.urlDate + this.urlIsbn;
+          urlCombined = urlCombined.replace("'", "");
+          self.link = "https://lib.uky.edu/ILLiad/illiad.dll?Action=10&Form=30&" + urlCombined;
+
+          //// End science URL
+          //// remove availability
+          //let scienceAvailability = document.querySelector('prm-search-result-availability-line');
+          //console.log(scienceAvailability);
+          //let scienceAvailabilityReplace = document.querySelector('prm-search-result-availability-line-after');
+          //console.log(scienceAvailabilityReplace);
+          //scienceAvailability.replaceWith(scienceAvailabilityReplace);
+        };
+
+////////// End Science
+////////// Start Google Books
+        if (self.parentCtrl.result.delivery.bestlocation.subLocationCode == 'gbooks') {
+          self.Mms = self.parentCtrl.result.pnx.control.recordid[0];
+          console.log("AeonRequest: GB triggered");
+          console.log(this);
+          self.linkLabel = "⚠️ This copy is temporarily unavailable.  Use this link to request this item from InterLibrary Loan.";
+
+          // build the OpenURL bits
+          try {
+            this.urlTitle = "&rft.title=" + encodeURIComponent(self.parentCtrl.result.pnx.addata.btitle[0]);
+              } catch (e) {
+            this.urlTitle = "&rft.title=undefined";
+          };
+
+          try {
+            this.urlCreator = "&rft.au=" + encodeURIComponent(self.parentCtrl.result.pnx.sort.author[0]);
+          } catch (e) {
+            this.urlCreator = "&rft.au=undefined"
+          };
+
+          try {
+            this.urlDate = "&rft.date=" + encodeURIComponent(self.parentCtrl.result.pnx.display.creationdate);
+          } catch (e) {
+            this.urlDate = "&rft.date==undefined";
+          }
+
+          try {
+            this.urlIsbn = "&rft.isbn=" + encodeURIComponent(self.parentCtrl.result.pnx.addata.isbn[0]);
+          } catch (e) {
+            this.urlIsbn = "&rft.isbn=undefined";
+          }
+          try {
+            this.urlGenre = "&rft.genre=" + encodeURIComponent(self.parentCtrl.result.pnx.addata.genre[0]);
+              } catch (e) {
+            this.urlGenre = "&rft.genre=undefined";
+          };
+          // UKY dissertation catch
+          try {
+            this.urlNotes = "&Notes=" + encodeURIComponent(self.parentCtrl.result.pnx.display.dissertation);
+              } catch (e) {
+            this.urlNotes = "&Notes=''";
+          };
+
+          let urlCombined = this.urlTitle + this.urlCreator + this.urlDate + this.urlIsbn + this.urlGenre + this.urlNotes;
+          urlCombined = urlCombined.replace("'", "");
+          self.link = "https://lib.uky.edu/ILLiad/illiad.dll?Action=10&Form=30&" + urlCombined;
+
+          };
+////////// End Google Books
+////////// Start Maps
+    if (mapCollectionAvailable.includes(self.parentCtrl.result.delivery.bestlocation.subLocationCode) || self.parentCtrl.result.delivery.bestlocation.libraryCode == "special") {
+      self.Mms = self.parentCtrl.result.pnx.control.recordid[0];
+      //console.log("Yes to this one: " + self.Mms);
       try {
         this.urlTitle = "&ItemTitle=" + encodeURIComponent(self.parentCtrl.result.pnx.addata.btitle[0]);
       } catch (e) {
@@ -134,19 +258,40 @@ angular.module('aeonRequest', [])
 
       // Parameters that vary depending on how we want Aeon to handle the material
       // branch the label text here  - Submit Request to Special Colletions Research Center for special stuff, map otherwise
-      if (self.parentCtrl.result.delivery.bestlocation.libraryCode == "special") {
+      // start SCRC here
+      let digitizationRequestCollection = ['spmicro', 'spthes'];
+      let physicalRequestCollection = ['spambrose', 'spmini', 'sp019', 'spuarp', 'sprbov', 'sprare', 'spscott'];
+      // SCRC Digitization requests
+      if (self.parentCtrl.result.delivery.bestlocation.libraryCode == "special" && digitizationRequestCollection.includes(self.parentCtrl.result.delivery.bestlocation.subLocationCode)) {
+        console.log("AeonRequest: Digitization link triggered");
+        self.linkLabel = "Request Digitization from Special Collections Research Center";
+        self.linkImage = "https://saalck-uky.primo.exlibrisgroup.com/discovery/custom/01SAA_UKY-UKY/img/UKAeonfavicon2.png";
+        this.urlGenre = ""
+        
+        let urlCombined = this.urlGenre + this.urlTitle + this.urlCreator + this.urlCallNo + this.urlSubLoc + this.urlDate + this.urlSource;
+        urlCombined = urlCombined.replace("'", "");
+        self.link = "https://requests-libraries.uky.edu/logon?Action=10&Form=23&OpenURL?" + urlCombined;
+
+      } else if (self.parentCtrl.result.delivery.bestlocation.libraryCode == "special" && physicalRequestCollection.includes(self.parentCtrl.result.delivery.bestlocation.subLocationCode)) {
+        console.log("AeonRequest: Physical link triggered");
         self.linkLabel = "Submit Request to Special Collections Research Center";
-        this.urlGenre = "";
+        self.linkImage = "https://saalck-uky.primo.exlibrisgroup.com/discovery/custom/01SAA_UKY-UKY/img/UKAeonfavicon2.png";
+        this.urlGenre = ""
+        
+        let urlCombined = this.urlGenre + this.urlTitle + this.urlCreator + this.urlCallNo + this.urlSubLoc + this.urlDate + this.urlSource;
+        urlCombined = urlCombined.replace("'", "");
+        self.link = "https://requests-libraries.uky.edu/logon?Action=10&Form=30&OpenURL?" + urlCombined;
+
       } else {
-        self.linkLabel = "Submit Request to Access This Map";
+        self.linkLabel = "⚠️ Due to building renovations, this item is unavailable until further notice.";
+        console.log(this);
+        self.linkImage = "";
         this.urlGenre = "&rft.genre=map";
+
+        let urlCombined = this.urlGenre + this.urlTitle + this.urlCreator + this.urlCallNo + this.urlSubLoc + this.urlDate + this.urlSource;
+        urlCombined = urlCombined.replace("'", "");
+        self.link = "https://libraries.uky.edu/news/renovations-impact-services-multiple-library-locations-beginning-summer-2026";
       }
-
-      let urlCombined = this.urlGenre + this.urlTitle + this.urlCreator + this.urlCallNo + this.urlSubLoc + this.urlDate + this.urlSource;
-      urlCombined = urlCombined.replace("'", "");
-      self.link = "https://requests-libraries.uky.edu/logon?Action=10&Form=30&OpenURL?" + urlCombined;
-
-
     }
   }
 };
@@ -171,7 +316,7 @@ angular.module('logoTweaks', [])
   })
 .component('prmSearchBarAfter',{
         bindings: {parentCtrl: '<'},
-        template: '<div class="primo-search-logo"></div><div id="scopeNoteBox"></div>' 
+        template: '</br><div class="alert-note"></div>' 
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -180,7 +325,7 @@ angular.module('logoTweaks', [])
 angular.module('floorMaps', [])
 .controller('libMapController', [function () {
   this.$onInit = function () { 
-    console.log("Map triggered");   
+    console.log("AeonRequest: Map triggered");   
   // just for debug purpose
   // var myvar = this;
 
@@ -256,9 +401,9 @@ angular.module('floorMaps', [])
           case "medical":
               this.currentLibrary = medicalcenter;
               break;
-          case "science":
-              this.currentLibrary = scieng;
-              break;
+          //case "science":
+          //    this.currentLibrary = scieng;
+          //    break;
 
           default:
               this.currentLibrary = null;
@@ -602,12 +747,6 @@ app.controller('prmSearchResultAvailabilityLineAfterController', function($scope
   // End Google Analytics
 
       
-// SiteImprove Stuff 
-  window.siteImprove = {}
-  siteImprove.script = document.createElement("script");
-  siteImprove.script.src = "https://siteimproveanalytics.com/js/siteanalyze_3628.js";
-  siteImprove.async = "true";
-  document.head.appendChild(siteImprove.script);
 
 
     // Adapted from Bond University Primo 
@@ -644,14 +783,14 @@ app.controller('prmSearchResultAvailabilityLineAfterController', function($scope
 // Start chat
 angular.module('libChat', [])
 .controller('chatBox', [function () {
-    console.log("start chat script");
+    //console.log("start chat script");
     var lc = document.createElement('script'); 
     lc.type = 'text/javascript'; 
     lc.async = 'true';
     lc.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'v2.libanswers.com/load_chat.php?hash=79e25f267bd8a74fe0647b277141f6a2';
     var s = document.getElementsByTagName('script')[0]; 
     s.parentNode.insertBefore(lc, s);
-    console.log("end chat script");
+    //console.log("end chat script");
 }]).component('prmTopBarBefore', {
     bindings: { parentCtrl: '<' },
     controller: 'chatBox',
@@ -671,7 +810,7 @@ angular.module('linksToKeep', []).component('prmServiceLinksAfter', {
       if (linksToKeep.length > 0) {
         var lNodes = $document[0].querySelectorAll("prm-service-links > div > div > div");
         for (var i = 0; i < lNodes.length; i++) {
-          console.log("reviewing link text");
+          //console.log("reviewing link text");
           var eNode = lNodes[i];
           var span = eNode.querySelector("a > span");
           if (span != null) {
@@ -713,8 +852,8 @@ angular.module('requestTweaks', []).component('prmRequestAfter', {
             genericCheckbox = document.querySelector('#form_field_checkbox_genericCheckBox')
 
             if (pickupLocation.textContent == "Young Library") {
-              console.log('presented checkbox');
-              console.log(pickupLocation.textContent);
+              //console.log('presented checkbox');
+              //console.log(pickupLocation.textContent);
               //console.log($scope);
               genericCheckbox.style.display = "";
               } else {
@@ -726,7 +865,6 @@ angular.module('requestTweaks', []).component('prmRequestAfter', {
         };
       };
 }});
-///////////////////////////////
 
 
 
